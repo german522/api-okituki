@@ -26,8 +26,8 @@ exports.getById = async (req, res) => {
 // Crear 
 exports.create = async (req, res) => {
   try {
-    const { nombre, telefono, direccion, correo, tipo, fotoperfilURL } = req.body;
-    const persona = await Persona.create({ nombre, telefono, direccion, correo, tipo, fotoperfilURL });
+    const { nombre, telefono, correo, tipo, fotoperfilURL } = req.body;
+    const persona = await Persona.create({ nombre, telefono, correo, tipo, fotoperfilURL });
     res.status(201).json({ success: true, data: persona });
   } catch (error) {
     console.error(" Error en POST /personas:", error);
@@ -38,11 +38,11 @@ exports.create = async (req, res) => {
 // Actualizar
 exports.update = async (req, res) => {
   try {
-    const { nombre, telefono, direccion, correo, tipo, fotoperfilURL } = req.body;
+    const { nombre, telefono, correo, tipo, fotoperfilURL } = req.body;
     const persona = await Persona.findByPk(req.params.id);
     if (!persona) return res.status(404).json({ success: false, error: "Persona no encontrada" });
 
-    await persona.update({ nombre, telefono, direccion, correo, tipo, fotoperfilURL });
+    await persona.update({ nombre, telefono, correo, tipo, fotoperfilURL });
     res.json({ success: true, data: persona });
   } catch (error) {
     console.error("Error en PUT /personas/:id:", error);
