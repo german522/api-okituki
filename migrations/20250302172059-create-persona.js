@@ -15,9 +15,6 @@ module.exports = {
       telefono: {
         type: Sequelize.STRING(20)
       },
-      direccion: {
-        type: Sequelize.TEXT
-      },
       correo: {
         type: Sequelize.STRING(255),
         allowNull: false,
