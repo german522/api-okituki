@@ -10,32 +10,29 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_actividad: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       numero_pasos: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       subtitulo_actividad: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(255),
+        allowNull: false,
       },
       instrucción: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       URL_imagen: {
-        type: Sequelize.TEXT
-      },
-      createdAt: {
+        type: Sequelize.TEXT,
         allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Descripcion_Actividad"
-    });
+      {
+        tableName: "Descripcion_Actividad"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Descripcion_Actividad');

@@ -3,13 +3,16 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Personas', {  // Asegúrate de que el nombre de la tabla esté aquí
-      id_persona: {
-        allowNull: false,
+      id: {
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        allowNull: false,
       },
       nombre: {
+        type: Sequelize.STRING(255)
+      },
+      apellido: {
         type: Sequelize.STRING(255)
       },
       telefono: {
@@ -24,16 +27,8 @@ module.exports = {
         type: Sequelize.ENUM("usuario", "psicologo"),
         allowNull: false
       },
-      fotoperfilURL: {
+      URL_imagen: {
         type: Sequelize.TEXT
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     }, {
       // Aquí puedes asegurarte de que la tabla no sea pluralizada

@@ -10,23 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nombre: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(255),
+        allowNull: false,
       },
       descripcion: {
         type: Sequelize.TEXT
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Tests"
-    });
+      {
+        tableName: "Tests"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Tests');

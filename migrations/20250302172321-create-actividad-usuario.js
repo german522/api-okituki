@@ -10,10 +10,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_usuario: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       id_actividad: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       fecha_realizacion: {
         type: Sequelize.DATE
@@ -21,19 +23,11 @@ module.exports = {
       estado: {
         type: Sequelize.ENUM("Activa", "Pendiente", "Completada", "Terminada"),
         allowNull: false
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Actividades_Usuario"
-    });
+      {
+        tableName: "Actividades_Usuario"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Actividades_Usuario');

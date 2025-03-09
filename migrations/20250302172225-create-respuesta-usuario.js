@@ -10,26 +10,21 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_resultado: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       id_pregunta: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       id_respuesta: {
-        type: Sequelize.INTEGER
-      },
-      createdAt: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Respuestas_Usuario"
-    });
+      {
+        tableName: "Respuestas_Usuario"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Respuestas_Usuario');

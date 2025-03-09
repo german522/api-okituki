@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Resultado = sequelize.define("Resultado", {
-    id_resultado: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     id_usuario: { type: DataTypes.INTEGER, allowNull: false },
     id_test: { type: DataTypes.INTEGER, allowNull: false },
     puntaje_total: { type: DataTypes.INTEGER, allowNull: false },
