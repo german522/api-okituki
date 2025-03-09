@@ -1,11 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Persona = sequelize.define("Persona", {
-    id_persona: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     nombre: { type: DataTypes.STRING(255), allowNull: false },
+    apellido: { type: DataTypes.STRING(255), allowNull: false },
     telefono: { type: DataTypes.STRING(20) },
     correo: { type: DataTypes.STRING(255), allowNull: false, unique: true },
     tipo: { type: DataTypes.ENUM("usuario", "psicologo"), allowNull: false },
-    fotoperfilURL: { type: DataTypes.TEXT }
+    URL_imagen: { type: DataTypes.TEXT }
   }, {
     tableName: "Personas",
     timestamps: false

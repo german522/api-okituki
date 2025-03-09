@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const RespuestaUsuario = sequelize.define("RespuestaUsuario", {
-    id_respuesta_usuario: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     id_resultado: { type: DataTypes.INTEGER, allowNull: false },
     id_pregunta: { type: DataTypes.INTEGER, allowNull: false },
     id_respuesta: { type: DataTypes.INTEGER, allowNull: false }

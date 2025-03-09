@@ -10,13 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_usuario: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       id_test: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       puntaje_total: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       nivel_estres: {
         type: Sequelize.ENUM("Bajo", "Moderado", "Alto"),
@@ -24,19 +27,11 @@ module.exports = {
       },
       fecha_realizacion: {
         type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Resultados"
-    });
+      {
+        tableName: "Resultados"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Resultados');

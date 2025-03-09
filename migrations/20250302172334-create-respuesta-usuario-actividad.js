@@ -10,23 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_actividad_usuario: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       respuesta_texto: {
-        type: Sequelize.TEXT
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.ENUM("Excelente", "Buena", "Regular", "No me sirvio"),
       }
     },
-    {
-      tableName: "Respuestas_Usuario_Actividades"
-    });
+      {
+        tableName: "Respuestas_Usuario_Actividades"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Respuestas_Usuario_Actividades');

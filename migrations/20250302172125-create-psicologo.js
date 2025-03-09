@@ -13,26 +13,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       especialidad: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(255)
       },
       experiencia: {
         type: Sequelize.INTEGER
       },
       horario_disponible: {
         type: Sequelize.TEXT
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Psicologos"
-    });
+      {
+        tableName: "Psicologos"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Psicologos');

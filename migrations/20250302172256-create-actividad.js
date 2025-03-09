@@ -10,23 +10,17 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_tipo_actividades: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       nombre: {
-        type: Sequelize.STRING
-      },
-      createdAt: {
+        type: Sequelize.STRING(255),
         allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
-    {
-      tableName: "Actividad"
-    });
+      {
+        tableName: "Actividad"
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Actividad');

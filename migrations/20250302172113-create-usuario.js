@@ -10,30 +10,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id_persona: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       contrasena: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(255),
+        allowNull: false
       },
-      edad: {
-        type: Sequelize.INTEGER
+      fecha_nacimiento: {
+        type: Sequelize.DATE
       },
       genero: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(50)
       },
       discapacidad: {
         type: Sequelize.ENUM("ninguna", "fisica", "visual", "auditiva", "motriz"),
         allowNull: false
       },
       fecha_registro: {
-        type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     }, {
