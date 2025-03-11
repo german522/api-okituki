@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Pregunta = sequelize.define("Pregunta", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     id_test: { type: DataTypes.INTEGER, allowNull: false },
+    numero_pregunta: { type: DataTypes.INTEGER, allowNull: false },
     pregunta: { type: DataTypes.TEXT, allowNull: false }
   }, {
     tableName: "Preguntas",
