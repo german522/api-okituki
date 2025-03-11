@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const personaController = require("../controllers/persona.controller");
+const authMiddleware = require("../middlewares/authMiddleware"); // Importar el middleware
 
-// Definir rutas y asociarlas con los controladores
-router.get("/", personaController.getAll);
-router.get("/:id", personaController.getById);
-router.post("/", personaController.create);
-router.put("/:id", personaController.update);
-router.delete("/:id", personaController.delete);
+router.get("/", authMiddleware, personaController.getAll);
+router.get("/:id", authMiddleware, personaController.getById);
+router.post("/", authMiddleware, personaController.create);
+router.put("/:id", authMiddleware, personaController.update);
+router.delete("/:id", authMiddleware, personaController.delete);
 
 module.exports = router;
