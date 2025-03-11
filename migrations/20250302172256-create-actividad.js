@@ -16,7 +16,11 @@ module.exports = {
       nombre: {
         type: Sequelize.STRING(255),
         allowNull: false,
-      }
+      },
+      descripcion: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
     },
       {
         tableName: "Actividad"

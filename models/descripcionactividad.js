@@ -2,9 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const DescripcionActividad = sequelize.define("DescripcionActividad", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     id_actividad: { type: DataTypes.INTEGER, allowNull: false },
-    numero_pasos: { type: DataTypes.INTEGER, allowNull: false },
-    subtitulo_actividad: { type: DataTypes.STRING(255), allowNull: false },
-    instrucción: { type: DataTypes.TEXT, allowNull: false },
+    numero_paso: { type: DataTypes.INTEGER, allowNull: false },
+    instruccion: { type: DataTypes.TEXT, allowNull: false },
     URL_imagen: { type: DataTypes.TEXT }
   }, {
     tableName: "Descripcion_Actividad",

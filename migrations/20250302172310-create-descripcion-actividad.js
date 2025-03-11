@@ -13,15 +13,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      numero_pasos: {
+      numero_paso: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      subtitulo_actividad: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-      },
-      instrucción: {
+      instruccion: {
         type: Sequelize.TEXT,
         allowNull: false,
       },

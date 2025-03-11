@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      numero_pregunta: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       pregunta: {
         type: Sequelize.TEXT,
         allowNull: false,
