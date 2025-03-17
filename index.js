@@ -4,7 +4,7 @@ const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const db = require("./models");
-const routes = require("./routes"); // Importamos todas las rutas desde routes/index.js
+const routes = require("./routes");
 
 
 const app = express();

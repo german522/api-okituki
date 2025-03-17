@@ -6,25 +6,24 @@ exports.register = async (req, res) => {
     try {
         const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad } = req.body;
 
-        // 🔹 Validar que 'tipo' esté presente
-        if (!tipo || (tipo !== "usuario" && tipo !== "psicologo")) {
-            return res.status(400).json({ success: false, error: "El campo 'tipo' es obligatorio y debe ser 'usuario' o 'psicologo'" });
+        if (!nombre || !apellido || !correo || !contrasena || !tipo) {
+            return res.status(400).json({ success: false, error: "Todos los campos obligatorios (nombre, apellido, correo, contrasena, tipo) deben estar completos." });
         }
 
-        // 🔹 Verificar si el correo ya existe
+        if (tipo !== "usuario" && tipo !== "psicologo") {
+            return res.status(400).json({ success: false, error: "El campo 'tipo' debe ser 'usuario' o 'psicologo'." });
+        }
+
         const personaExistente = await Persona.findOne({ where: { correo } });
         if (personaExistente) {
-            return res.status(400).json({ success: false, error: "El correo ya está registrado" });
+            return res.status(400).json({ success: false, error: "El correo ya está registrado." });
         }
 
-        // 🔹 Hashear contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(contrasena, salt);
 
-        // 🔹 Crear Persona
         const persona = await Persona.create({ nombre, apellido, correo, tipo });
 
-        // 🔹 Crear Usuario vinculado a Persona
         const usuario = await Usuario.create({
             id_persona: persona.id,
             contrasena: hashedPassword,
@@ -33,81 +32,75 @@ exports.register = async (req, res) => {
             discapacidad
         });
 
-        res.status(201).json({ success: true, message: "Usuario registrado correctamente", data: usuario });
+        res.status(201).json({ success: true, message: "Usuario registrado correctamente." });
 
     } catch (error) {
         console.error("❌ Error en POST /register:", error);
-        res.status(500).json({ success: false, error: "Error en el registro" });
+        res.status(500).json({ success: false, error: "Error interno al registrar usuario." });
     }
 };
 
-
-// ✅ LOGIN
+// LOGIN
 exports.login = async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
 
-        // 🔹 Verificar si el usuario existe
+        if (!correo || !contrasena) {
+            return res.status(400).json({ success: false, error: "Correo y contraseña son obligatorios." });
+        }
+
         const persona = await Persona.findOne({
             where: { correo },
             include: [{ model: Usuario }]
         });
 
-        if (!persona) {
-            return res.status(400).json({ success: false, error: "Credenciales incorrectas" });
+        if (!persona || !persona.Usuario) {
+            return res.status(400).json({ success: false, error: "Credenciales incorrectas." });
         }
 
-        // 🔹 Extraer la contraseña hasheada del usuario
-        const usuario = persona.Usuario;
-        if (!usuario) {
-            return res.status(400).json({ success: false, error: "Credenciales incorrectas" });
-        }
-
-        console.log("Contraseña ingresada:", contrasena);
-        console.log("Contraseña almacenada (hasheada):", usuario.contrasena);
-
-
-        // 🔹 Comparar la contraseña ingresada con la hasheada en la base de datos
-        const passwordMatch = await bcrypt.compare(contrasena, usuario.contrasena);
+        const passwordMatch = await bcrypt.compare(contrasena, persona.Usuario.contrasena);
 
         if (!passwordMatch) {
-            return res.status(400).json({ success: false, error: "Credenciales incorrectas" });
+            return res.status(400).json({ success: false, error: "Credenciales incorrectas." });
         }
 
-        // 🔹 Generar token JWT
         const token = jwt.sign(
-            { id: usuario.id, correo: persona.correo, tipo: persona.tipo },
+            { id: persona.Usuario.id, correo: persona.correo, tipo: persona.tipo },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
 
         res.status(200).json({
             success: true,
-            message: "Inicio de sesión exitoso",
+            message: "Inicio de sesión exitoso.",
             token
         });
 
     } catch (error) {
         console.error("❌ Error en POST /login:", error);
-        res.status(500).json({ success: false, error: "Error en inicio de sesión" });
+        res.status(500).json({ success: false, error: "Error interno en inicio de sesión." });
     }
 };
 
+// PERFIL
 exports.perfil = async (req, res) => {
     try {
-        // El middleware de autenticación ya habrá agregado los datos del usuario en req.user
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ success: false, error: "No autorizado. Token inválido." });
+        }
+
         const usuario = await Usuario.findOne({
             where: { id: req.user.id },
             include: { model: Persona }
         });
 
         if (!usuario) {
-            return res.status(404).json({ success: false, error: "Usuario no encontrado" });
+            return res.status(404).json({ success: false, error: "Usuario no encontrado." });
         }
 
         res.status(200).json({
             success: true,
-            message: "Perfil obtenido exitosamente",
+            message: "Perfil obtenido exitosamente.",
             data: {
                 id: usuario.id,
                 nombre: usuario.Persona.nombre,
@@ -121,6 +114,7 @@ exports.perfil = async (req, res) => {
         });
     } catch (error) {
         console.error("❌ Error en GET /perfil:", error);
-        res.status(500).json({ success: false, error: "Error al obtener el perfil" });
+        res.status(500).json({ success: false, error: "Error interno al obtener el perfil." });
     }
 };
+

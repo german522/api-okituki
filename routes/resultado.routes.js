@@ -5,6 +5,8 @@ const authMiddleware = require("../middlewares/authMiddleware"); // Importar el 
 
 resultadoRouter.get("/", authMiddleware, resultadoController.getAll);
 resultadoRouter.get("/:id", authMiddleware, resultadoController.getById);
-
+resultadoRouter.post("/", authMiddleware, resultadoController.create);
+resultadoRouter.put("/:id", authMiddleware, resultadoController.update);
+resultadoRouter.delete("/:id", authMiddleware, resultadoController.delete);
 
 module.exports = resultadoRouter;
