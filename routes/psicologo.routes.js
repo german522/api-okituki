@@ -5,9 +5,5 @@ const authMiddleware = require("../middlewares/authMiddleware"); // Importar el 
 
 psicologoRouter.get("/", authMiddleware, psicologoController.getAll);
 psicologoRouter.get("/:id", authMiddleware, psicologoController.getById);
-psicologoRouter.post("/", authMiddleware, psicologoController.create);
-psicologoRouter.put("/:id", authMiddleware, psicologoController.update);
-psicologoRouter.delete("/:id", authMiddleware, psicologoController.delete);
-
 
 module.exports = psicologoRouter;

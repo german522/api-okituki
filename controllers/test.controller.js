@@ -3,52 +3,36 @@ const testRepository = require("../repository/test.repository");
 exports.getAll = async (req, res) => {
     try {
         const tests = await testRepository.getAll();
+
+        if (!tests || tests.length === 0) {
+            return res.status(404).json({ success: false, error: "No se encontraron tests en el catálogo." });
+        }
+
         res.json({ success: true, data: tests });
     } catch (error) {
         console.error("❌ Error en GET /tests:", error);
-        res.status(500).json({ success: false, error: "Error al obtener tests" });
+        res.status(500).json({ success: false, error: "Error interno al obtener los tests." });
     }
 };
 
 exports.getById = async (req, res) => {
     try {
-        const test = await testRepository.getById(req.params.id);
-        if (!test) return res.status(404).json({ success: false, error: "Test no encontrado" });
+        const id = parseInt(req.params.id, 10);
+
+        if (isNaN(id) || id <= 0) {
+            return res.status(400).json({ success: false, error: "ID de test no válido. Debe ser un número entero positivo." });
+        }
+
+        const test = await testRepository.getById(id);
+
+        if (!test) {
+            return res.status(404).json({ success: false, error: `No se encontró un test con el ID ${id}.` });
+        }
+
         res.json({ success: true, data: test });
     } catch (error) {
         console.error("❌ Error en GET /tests/:id:", error);
-        res.status(500).json({ success: false, error: "Error al obtener test" });
+        res.status(500).json({ success: false, error: "Error interno al obtener el test." });
     }
 };
 
-exports.create = async (req, res) => {
-    try {
-        const test = await testRepository.create(req.body);
-        res.status(201).json({ success: true, data: test });
-    } catch (error) {
-        console.error("❌ Error en POST /tests:", error);
-        res.status(500).json({ success: false, error: "Error al crear test" });
-    }
-};
-
-exports.update = async (req, res) => {
-    try {
-        const test = await testRepository.update(req.params.id, req.body);
-        if (!test) return res.status(404).json({ success: false, error: "Test no encontrado" });
-        res.json({ success: true, data: test });
-    } catch (error) {
-        console.error("❌ Error en PUT /tests/:id:", error);
-        res.status(500).json({ success: false, error: "Error al actualizar test" });
-    }
-};
-
-exports.delete = async (req, res) => {
-    try {
-        const success = await testRepository.delete(req.params.id);
-        if (!success) return res.status(404).json({ success: false, error: "Test no encontrado" });
-        res.json({ success: true, message: "Test eliminado correctamente" });
-    } catch (error) {
-        console.error("❌ Error en DELETE /tests/:id:", error);
-        res.status(500).json({ success: false, error: "Error al eliminar test" });
-    }
-};

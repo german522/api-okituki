@@ -5,9 +5,5 @@ const authMiddleware = require("../middlewares/authMiddleware"); // Importar el 
 
 preguntaRouter.get("/", authMiddleware, preguntaController.getAll);
 preguntaRouter.get("/:id", authMiddleware, preguntaController.getById);
-preguntaRouter.post("/", authMiddleware, preguntaController.create);
-preguntaRouter.put("/:id", authMiddleware, preguntaController.update);
-preguntaRouter.delete("/:id", authMiddleware, preguntaController.delete);
-
 
 module.exports = preguntaRouter;
