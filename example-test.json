@@ -1,0 +1,55 @@
+{
+    "test": {
+        "id": 1,
+        "descripcion": "Este es un test de ejemplo para evaluar conocimientos básicos.",
+        "preguntas": [
+            {
+                "id": 101,
+                "texto": "¿Cuál es la capital de Francia?",
+                "respuestas": [
+                    {
+                        "id": 1,
+                        "texto": "Madrid",
+                        "esCorrecta": false
+                    },
+                    {
+                        "id": 2,
+                        "texto": "París",
+                        "esCorrecta": true
+                    },
+                    {
+                        "id": 3,
+                        "texto": "Roma",
+                        "esCorrecta": false
+                    },
+                    {
+                        "id": 4,
+                        "texto": "Berlín",
+                        "esCorrecta": false
+                    }
+                ]
+            },
+            {
+                "id": 102,
+                "texto": "¿Cuál es el resultado de 2 + 2?",
+                "respuestas": [
+                    {
+                        "id": 5,
+                        "texto": "3",
+                        "esCorrecta": false
+                    },
+                    {
+                        "id": 6,
+                        "texto": "4",
+                        "esCorrecta": true
+                    },
+                    {
+                        "id": 7,
+                        "texto": "5",
+                        "esCorrecta": false
+                    }
+                ]
+            }
+        ]
+    }
+}

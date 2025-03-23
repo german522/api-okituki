@@ -1,4 +1,4 @@
-const { Test } = require("../models");
+const { Test, Pregunta, Respuesta } = require("../models");
 
 class TestRepository {
     async getAll() {
@@ -6,7 +6,16 @@ class TestRepository {
     }
 
     async getById(id) {
-        return await Test.findByPk(id);
+        return await Test.findByPk(id, {
+            include: {
+                model: Pregunta,
+                as: "preguntas",
+                include: {
+                    model: Respuesta,
+                    as: "respuestas",
+                },
+            },
+        });
     }
 
     async create(data) {

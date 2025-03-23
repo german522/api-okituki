@@ -169,8 +169,8 @@ module.exports = {
         id: 24,
         id_actividad: 6, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
-        instruccion: "",
-        URL_imagen: "Siéntese en una postura cómoda, ya sea en una silla o en el suelo. O túmbese, si le resulta más cómodo. Puede cerrar los ojos o mirar hacia abajo, manteniendo la mirada unos centímetros por delante de usted en el suelo."
+        instruccion: "Siéntese en una postura cómoda, ya sea en una silla o en el suelo. O túmbese, si le resulta más cómodo. Puede cerrar los ojos o mirar hacia abajo, manteniendo la mirada unos centímetros por delante de usted en el suelo.",
+        URL_imagen: ""
       },
       {
         id: 25,
