@@ -29,6 +29,7 @@ db.TipoActividad = require("./tipoactividad")(sequelize, Sequelize.DataTypes);
 db.Actividad = require("./actividad")(sequelize, Sequelize.DataTypes);
 db.ActividadUsuario = require("./actividadusuario")(sequelize, Sequelize.DataTypes);
 db.DescripcionActividad = require("./descripcionactividad")(sequelize, Sequelize.DataTypes);
+db.RefreshToken = require("./refreshToken")(sequelize, Sequelize.DataTypes);
 
 // Asociaciones
 Object.keys(db).forEach((modelName) => {
