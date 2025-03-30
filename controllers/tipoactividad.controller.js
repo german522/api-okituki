@@ -1,17 +1,18 @@
 const tipoActividadRepository = require("../repository/tipoactividad.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const tiposActividad = await tipoActividadRepository.getAll();
 
         if (!tiposActividad || tiposActividad.length === 0) {
-            return res.status(404).json({ success: false, error: "No se encontraron tipos de actividad en el catálogo." });
+            return ApiResponse.send(false, "No se encontraron tipos de actividad en el catálogo.", null, res, 404);
         }
 
-        res.json({ success: true, data: tiposActividad });
+        return ApiResponse.send(true, "Tipos de actividad obtenidos con éxito.", tiposActividad, res);
     } catch (error) {
         console.error("❌ Error en GET /tipo_actividades:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener los tipos de actividad." });
+        return ApiResponse.send(false, "Error interno al obtener los tipos de actividad.", null, res, 500);
     }
 };
 
@@ -20,18 +21,18 @@ exports.getById = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de tipo de actividad no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de tipo de actividad no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const tipoActividad = await tipoActividadRepository.getById(id);
 
         if (!tipoActividad) {
-            return res.status(404).json({ success: false, error: `No se encontró un tipo de actividad con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró un tipo de actividad con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, data: tipoActividad });
+        return ApiResponse.send(true, "Tipo de actividad obtenido con éxito.", tipoActividad, res);
     } catch (error) {
         console.error("❌ Error en GET /tipo_actividades/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener el tipo de actividad." });
+        return ApiResponse.send(false, "Error interno al obtener el tipo de actividad.", null, res, 500);
     }
 };

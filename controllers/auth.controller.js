@@ -1,23 +1,23 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Usuario, Persona, RefreshToken } = require("../models");
-
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.register = async (req, res) => {
     try {
         const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad } = req.body;
 
         if (!nombre || !apellido || !correo || !contrasena || !tipo) {
-            return res.status(400).json({ success: false, error: "Todos los campos obligatorios (nombre, apellido, correo, contrasena, tipo) deben estar completos." });
+            return ApiResponse.send(false, "Todos los campos obligatorios (nombre, apellido, correo, contrasena, tipo) deben estar completos.", null, res, 400);
         }
 
         if (tipo !== "usuario" && tipo !== "psicologo") {
-            return res.status(400).json({ success: false, error: "El campo 'tipo' debe ser 'usuario' o 'psicologo'." });
+            return ApiResponse.send(false, "El campo 'tipo' debe ser 'usuario' o 'psicologo'.", null, res, 400);
         }
 
         const personaExistente = await Persona.findOne({ where: { correo } });
         if (personaExistente) {
-            return res.status(400).json({ success: false, error: "El correo ya está registrado." });
+            return ApiResponse.send(false, "El correo ya está registrado.", null, res, 400);
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
 
         const persona = await Persona.create({ nombre, apellido, correo, tipo });
 
-        const usuario = await Usuario.create({
+        await Usuario.create({
             id_persona: persona.id,
             contrasena: hashedPassword,
             fecha_nacimiento,
@@ -33,11 +33,11 @@ exports.register = async (req, res) => {
             discapacidad
         });
 
-        res.status(201).json({ success: true, message: "Usuario registrado correctamente." });
+        return ApiResponse.send(true, "Usuario registrado correctamente.", null, res, 201);
 
     } catch (error) {
         console.error("❌ Error en POST /register:", error);
-        res.status(500).json({ success: false, error: "Error interno al registrar usuario." });
+        return ApiResponse.send(false, "Error interno al registrar usuario.", null, res, 500);
     }
 };
 
@@ -45,29 +45,31 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
-        if (!correo || !contrasena) return res.status(400).json({ success: false, error: "Correo y contraseña son obligatorios." });
+        if (!correo || !contrasena) {
+            return ApiResponse.send(false, "Correo y contraseña son obligatorios.", null, res, 400);
+        }
 
         const persona = await Persona.findOne({ where: { correo }, include: [{ model: Usuario }] });
-        if (!persona || !persona.Usuario) return res.status(400).json({ success: false, error: "Credenciales incorrectas." });
+        if (!persona || !persona.Usuario) {
+            return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
+        }
 
         const passwordMatch = await bcrypt.compare(contrasena, persona.Usuario.contrasena);
-        if (!passwordMatch) return res.status(400).json({ success: false, error: "Credenciales incorrectas." });
+        if (!passwordMatch) {
+            return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
+        }
 
         // Generar tokens
         const accessToken = jwt.sign({ id: persona.Usuario.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         const refreshToken = jwt.sign({ id: persona.Usuario.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
         // Guardar Refresh Token en la BD
-        const newToken = await RefreshToken.create({ usuarioId: persona.Usuario.id, token: refreshToken });
+        await RefreshToken.create({ usuarioId: persona.Usuario.id, token: refreshToken });
 
-        // 🔹 Log para verificar que se guardó en la BD
-        console.log("✅ Refresh Token guardado en la BD:", newToken);
-
-        res.status(200).json({ success: true, accessToken, refreshToken });
-
+        return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken }, res);
     } catch (error) {
         console.error("❌ Error en login:", error);
-        res.status(500).json({ success: false, error: "Error interno en inicio de sesión." });
+        return ApiResponse.send(false, "Error interno en inicio de sesión.", null, res, 500);
     }
 };
 
@@ -75,7 +77,7 @@ exports.login = async (req, res) => {
 exports.perfil = async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
-            return res.status(401).json({ success: false, error: "No autorizado. Token inválido." });
+            return ApiResponse.send(false, "No autorizado. Token inválido.", null, res, 401);
         }
 
         const usuario = await Usuario.findOne({
@@ -84,64 +86,65 @@ exports.perfil = async (req, res) => {
         });
 
         if (!usuario) {
-            return res.status(404).json({ success: false, error: "Usuario no encontrado." });
+            return ApiResponse.send(false, "Usuario no encontrado.", null, res, 404);
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Perfil obtenido exitosamente.",
-            data: {
-                id: usuario.id,
-                nombre: usuario.Persona.nombre,
-                apellido: usuario.Persona.apellido,
-                correo: usuario.Persona.correo,
-                tipo: usuario.Persona.tipo,
-                fecha_nacimiento: usuario.fecha_nacimiento,
-                genero: usuario.genero,
-                discapacidad: usuario.discapacidad
-            }
-        });
+        const data = {
+            id: usuario.id,
+            nombre: usuario.Persona.nombre,
+            apellido: usuario.Persona.apellido,
+            correo: usuario.Persona.correo,
+            tipo: usuario.Persona.tipo,
+            fecha_nacimiento: usuario.fecha_nacimiento,
+            genero: usuario.genero,
+            discapacidad: usuario.discapacidad
+        };
+
+        return ApiResponse.send(true, "Perfil obtenido exitosamente.", data, res);
     } catch (error) {
         console.error("❌ Error en GET /perfil:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener el perfil." });
+        return ApiResponse.send(false, "Error interno al obtener el perfil.", null, res, 500);
     }
 };
 
+// REFRESH TOKEN
 exports.refreshToken = async (req, res) => {
     try {
         const { token } = req.body;
-        if (!token) return res.status(400).json({ success: false, error: "Refresh Token es requerido." });
+        if (!token) return ApiResponse.send(false, "Refresh Token es requerido.", null, res, 400);
 
         const storedToken = await RefreshToken.findOne({ where: { token } });
-        if (!storedToken) return res.status(403).json({ success: false, error: "Refresh Token inválido." });
+        if (!storedToken) return ApiResponse.send(false, "Refresh Token inválido.", null, res, 403);
 
         jwt.verify(token, process.env.JWT_REFRESH_SECRET, async (err, decoded) => {
-            if (err) return res.status(403).json({ success: false, error: "Refresh Token inválido o expirado." });
+            if (err) return ApiResponse.send(false, "Refresh Token inválido o expirado.", null, res, 403);
 
             const accessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-            res.status(200).json({ success: true, accessToken });
+
+            return ApiResponse.send(true, "Nuevo token generado.", { accessToken }, res);
         });
 
     } catch (error) {
         console.error("❌ Error en refreshToken:", error);
-        res.status(500).json({ success: false, error: "Error interno al refrescar el token." });
+        return ApiResponse.send(false, "Error interno al refrescar el token.", null, res, 500);
     }
 };
 
+// LOGOUT
 exports.logout = async (req, res) => {
     try {
         const { token } = req.body;
-        if (!token) return res.status(400).json({ success: false, error: "Refresh Token es requerido." });
+        if (!token) return ApiResponse.send(false, "Refresh Token es requerido.", null, res, 400);
 
         await RefreshToken.destroy({ where: { token } });
 
-        res.status(200).json({ success: true, message: "Sesión cerrada correctamente." });
-
+        return ApiResponse.send(true, "Sesión cerrada correctamente.", null, res);
     } catch (error) {
         console.error("❌ Error en logout:", error);
-        res.status(500).json({ success: false, error: "Error interno al cerrar sesión." });
+        return ApiResponse.send(false, "Error interno al cerrar sesión.", null, res, 500);
     }
 };
+
 
 
 

@@ -1,11 +1,12 @@
 const descripcionActividadRepository = require("../repository/descripcionactividad.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const descripciones = await descripcionActividadRepository.getAll();
 
         if (!descripciones || descripciones.length === 0) {
-            return res.status(404).json({ success: false, error: "No se encontraron descripciones de actividad en el catálogo." });
+            return ApiResponse.send(false, "No se encontraron descripciones de actividad en el catálogo.", null, res, 404);
         }
 
         // Construir la URL completa de la imagen para cada registro
@@ -14,10 +15,10 @@ exports.getAll = async (req, res) => {
             URL_imagen: descripcion.URL_imagen ? `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}` : null
         }));
 
-        res.json({ success: true, data: descripcionesConURLs });
+        return ApiResponse.send(true, "Descripciones de actividad obtenidas con éxito.", descripcionesConURLs, res);
     } catch (error) {
         console.error("❌ Error en GET /descripcion_actividad:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener las descripciones de actividad." });
+        return ApiResponse.send(false, "Error interno al obtener las descripciones de actividad.", null, res, 500);
     }
 };
 
@@ -26,21 +27,21 @@ exports.getById = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de descripción de actividad no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de descripción de actividad no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const descripcion = await descripcionActividadRepository.getById(id);
 
         if (!descripcion) {
-            return res.status(404).json({ success: false, error: `No se encontró una descripción de actividad con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una descripción de actividad con el ID ${id}.`, null, res, 404);
         }
 
         // Construir la URL completa de la imagen
         descripcion.URL_imagen = descripcion.URL_imagen ? `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}` : null;
 
-        res.json({ success: true, data: descripcion });
+        return ApiResponse.send(true, "Descripción de actividad obtenida con éxito.", descripcion, res);
     } catch (error) {
         console.error("❌ Error en GET /descripcion_actividad/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener la descripción de actividad." });
+        return ApiResponse.send(false, "Error interno al obtener la descripción de actividad.", null, res, 500);
     }
 };

@@ -1,17 +1,18 @@
 const respuestasUsuarioActividadesRepository = require("../repository/respuestasusuarioactividades.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const respuestas = await respuestasUsuarioActividadesRepository.getAll();
 
         if (!respuestas || respuestas.length === 0) {
-            return res.status(404).json({ success: false, error: "No se encontraron respuestas de usuario en actividades." });
+            return ApiResponse.send(false, "No se encontraron respuestas de usuario en actividades.", null, res, 404);
         }
 
-        res.json({ success: true, data: respuestas });
+        return ApiResponse.send(true, "Respuestas de usuario en actividades obtenidas con éxito.", respuestas, res);
     } catch (error) {
         console.error("❌ Error en GET /respuestas_usuario_actividades:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener las respuestas de usuario en actividades." });
+        return ApiResponse.send(false, "Error interno al obtener las respuestas de usuario en actividades.", null, res, 500);
     }
 };
 
@@ -20,19 +21,19 @@ exports.getById = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de respuesta no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de respuesta no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const respuesta = await respuestasUsuarioActividadesRepository.getById(id);
 
         if (!respuesta) {
-            return res.status(404).json({ success: false, error: `No se encontró una respuesta de usuario en actividades con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una respuesta de usuario en actividades con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, data: respuesta });
+        return ApiResponse.send(true, "Respuesta de usuario en actividades obtenida con éxito.", respuesta, res);
     } catch (error) {
         console.error("❌ Error en GET /respuestas_usuario_actividades/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener la respuesta de usuario en actividades." });
+        return ApiResponse.send(false, "Error interno al obtener la respuesta de usuario en actividades.", null, res, 500);
     }
 };
 
@@ -41,14 +42,14 @@ exports.create = async (req, res) => {
         const { id_actividad_usuario, respuesta_texto } = req.body;
 
         if (!id_actividad_usuario || !respuesta_texto) {
-            return res.status(400).json({ success: false, error: "Todos los campos (id_actividad_usuario, respuesta_texto) son obligatorios." });
+            return ApiResponse.send(false, "Todos los campos (id_actividad_usuario, respuesta_texto) son obligatorios.", null, res, 400);
         }
 
         const respuesta = await respuestasUsuarioActividadesRepository.create(req.body);
-        res.status(201).json({ success: true, data: respuesta });
+        return ApiResponse.send(true, "Respuesta de usuario en actividades creada con éxito.", respuesta, res, 201);
     } catch (error) {
         console.error("❌ Error en POST /respuestas_usuario_actividades:", error);
-        res.status(500).json({ success: false, error: "Error interno al crear la respuesta de usuario en actividades." });
+        return ApiResponse.send(false, "Error interno al crear la respuesta de usuario en actividades.", null, res, 500);
     }
 };
 
@@ -57,19 +58,19 @@ exports.update = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de respuesta no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de respuesta no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const respuesta = await respuestasUsuarioActividadesRepository.update(id, req.body);
 
         if (!respuesta) {
-            return res.status(404).json({ success: false, error: `No se encontró una respuesta de usuario en actividades con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una respuesta de usuario en actividades con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, data: respuesta });
+        return ApiResponse.send(true, "Respuesta de usuario en actividades actualizada con éxito.", respuesta, res);
     } catch (error) {
         console.error("❌ Error en PUT /respuestas_usuario_actividades/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al actualizar la respuesta de usuario en actividades." });
+        return ApiResponse.send(false, "Error interno al actualizar la respuesta de usuario en actividades.", null, res, 500);
     }
 };
 
@@ -78,18 +79,18 @@ exports.delete = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de respuesta no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de respuesta no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const success = await respuestasUsuarioActividadesRepository.delete(id);
 
         if (!success) {
-            return res.status(404).json({ success: false, error: `No se encontró una respuesta de usuario en actividades con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una respuesta de usuario en actividades con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, message: "Respuesta de usuario en actividades eliminada correctamente." });
+        return ApiResponse.send(true, "Respuesta de usuario en actividades eliminada correctamente.", null, res);
     } catch (error) {
         console.error("❌ Error en DELETE /respuestas_usuario_actividades/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al eliminar la respuesta de usuario en actividades." });
+        return ApiResponse.send(false, "Error interno al eliminar la respuesta de usuario en actividades.", null, res, 500);
     }
 };

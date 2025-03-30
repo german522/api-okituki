@@ -1,17 +1,18 @@
 const respuestaRepository = require("../repository/respuesta.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const respuestas = await respuestaRepository.getAll();
 
         if (!respuestas || respuestas.length === 0) {
-            return res.status(404).json({ success: false, error: "No se encontraron respuestas en el catálogo." });
+            return ApiResponse.send(false, "No se encontraron respuestas en el catálogo.", null, res, 404);
         }
 
-        res.json({ success: true, data: respuestas });
+        return ApiResponse.send(true, "Respuestas obtenidas con éxito.", respuestas, res);
     } catch (error) {
         console.error("❌ Error en GET /respuestas:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener las respuestas." });
+        return ApiResponse.send(false, "Error interno al obtener las respuestas.", null, res, 500);
     }
 };
 
@@ -20,19 +21,18 @@ exports.getById = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de respuesta no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de respuesta no válido.", null, res, 400);
         }
 
         const respuesta = await respuestaRepository.getById(id);
 
         if (!respuesta) {
-            return res.status(404).json({ success: false, error: `No se encontró una respuesta con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una respuesta con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, data: respuesta });
+        return ApiResponse.send(true, "Respuesta obtenida con éxito.", respuesta, res);
     } catch (error) {
-        console.error("❌ Error en GET /respuestas/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener la respuesta." });
+        console.error("Error en GET /respuestas/:id:", error);
+        return ApiResponse.send(false, "Error interno al obtener la respuesta.", null, res, 500);
     }
 };
-
