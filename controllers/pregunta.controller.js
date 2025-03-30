@@ -1,17 +1,18 @@
 const preguntaRepository = require("../repository/pregunta.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const preguntas = await preguntaRepository.getAll();
 
         if (!preguntas || preguntas.length === 0) {
-            return res.status(404).json({ success: false, error: "No se encontraron preguntas en el catálogo." });
+            return ApiResponse.send(false, "No se encontraron preguntas en el catálogo.", null, res, 404);
         }
 
-        res.json({ success: true, data: preguntas });
+        return ApiResponse.send(true, "Preguntas obtenidas con éxito.", preguntas, res);
     } catch (error) {
         console.error("❌ Error en GET /preguntas:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener las preguntas." });
+        return ApiResponse.send(false, "Error interno al obtener las preguntas.", null, res, 500);
     }
 };
 
@@ -20,18 +21,18 @@ exports.getById = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de pregunta no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de pregunta no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const pregunta = await preguntaRepository.getById(id);
 
         if (!pregunta) {
-            return res.status(404).json({ success: false, error: `No se encontró una pregunta con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una pregunta con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, data: pregunta });
+        return ApiResponse.send(true, "Pregunta obtenida con éxito.", pregunta, res);
     } catch (error) {
         console.error("❌ Error en GET /preguntas/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener la pregunta." });
+        return ApiResponse.send(false, "Error interno al obtener la pregunta.", null, res, 500);
     }
 };

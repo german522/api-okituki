@@ -1,54 +1,72 @@
 const usuarioRepository = require("../repository/usuario.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const usuarios = await usuarioRepository.getAll();
-        res.json({ success: true, data: usuarios });
+
+        if (!usuarios || usuarios.length === 0) {
+            return ApiResponse.send(false, "No se encontraron usuarios en el sistema.", null, res, 404);
+        }
+
+        return ApiResponse.send(true, "Usuarios obtenidos con éxito.", usuarios, res);
     } catch (error) {
         console.error("❌ Error en GET /usuarios:", error);
-        res.status(500).json({ success: false, error: "Error al obtener usuarios" });
+        return ApiResponse.send(false, "Error interno al obtener usuarios.", null, res, 500);
     }
 };
 
 exports.getById = async (req, res) => {
     try {
         const usuario = await usuarioRepository.getById(req.params.id);
-        if (!usuario) return res.status(404).json({ success: false, error: "Usuario no encontrado" });
-        res.json({ success: true, data: usuario });
+
+        if (!usuario) {
+            return ApiResponse.send(false, "Usuario no encontrado", null, res, 404);
+        }
+
+        return ApiResponse.send(true, "Usuario obtenido con éxito.", usuario, res);
     } catch (error) {
         console.error("❌ Error en GET /usuarios/:id:", error);
-        res.status(500).json({ success: false, error: "Error al obtener usuario" });
+        return ApiResponse.send(false, "Error interno al obtener usuario.", null, res, 500);
     }
 };
 
 exports.create = async (req, res) => {
     try {
         const usuario = await usuarioRepository.create(req.body);
-        res.status(201).json({ success: true, data: usuario });
+        return ApiResponse.send(true, "Usuario creado con éxito.", usuario, res, 201);
     } catch (error) {
         console.error("❌ Error en POST /usuarios:", error);
-        res.status(500).json({ success: false, error: "Error al crear usuario" });
+        return ApiResponse.send(false, "Error al crear usuario.", null, res, 500);
     }
 };
 
 exports.update = async (req, res) => {
     try {
         const usuario = await usuarioRepository.update(req.params.id, req.body);
-        if (!usuario) return res.status(404).json({ success: false, error: "Usuario no encontrado" });
-        res.json({ success: true, data: usuario });
+
+        if (!usuario) {
+            return ApiResponse.send(false, "Usuario no encontrado", null, res, 404);
+        }
+
+        return ApiResponse.send(true, "Usuario actualizado con éxito.", usuario, res);
     } catch (error) {
         console.error("❌ Error en PUT /usuarios/:id:", error);
-        res.status(500).json({ success: false, error: "Error al actualizar usuario" });
+        return ApiResponse.send(false, "Error al actualizar usuario.", null, res, 500);
     }
 };
 
 exports.delete = async (req, res) => {
     try {
         const success = await usuarioRepository.delete(req.params.id);
-        if (!success) return res.status(404).json({ success: false, error: "Usuario no encontrado" });
-        res.json({ success: true, message: "Usuario eliminado correctamente" });
+
+        if (!success) {
+            return ApiResponse.send(false, "Usuario no encontrado", null, res, 404);
+        }
+
+        return ApiResponse.send(true, "Usuario eliminado correctamente.", null, res);
     } catch (error) {
         console.error("❌ Error en DELETE /usuarios/:id:", error);
-        res.status(500).json({ success: false, error: "Error al eliminar usuario" });
+        return ApiResponse.send(false, "Error al eliminar usuario.", null, res, 500);
     }
 };

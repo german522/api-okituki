@@ -1,17 +1,18 @@
 const actividadRepository = require("../repository/actividad.repository");
+const ApiResponse = require("../utils/ApiResponse");
 
 exports.getAll = async (req, res) => {
     try {
         const actividades = await actividadRepository.getAll();
 
         if (!actividades || actividades.length === 0) {
-            return res.status(404).json({ success: false, error: "No se encontraron actividades en el catálogo." });
+            return ApiResponse.send(false, "No se encontraron actividades en el catálogo.", null, res, 404);
         }
 
-        res.json({ success: true, data: actividades });
+        return ApiResponse.send(true, "Actividades obtenidas con éxito.", actividades, res);
     } catch (error) {
         console.error("❌ Error en GET /actividades:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener las actividades." });
+        return ApiResponse.send(false, "Error interno al obtener las actividades.", null, res, 500);
     }
 };
 
@@ -20,18 +21,19 @@ exports.getById = async (req, res) => {
         const id = parseInt(req.params.id, 10);
 
         if (isNaN(id) || id <= 0) {
-            return res.status(400).json({ success: false, error: "ID de actividad no válido. Debe ser un número entero positivo." });
+            return ApiResponse.send(false, "ID de actividad no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
         const actividad = await actividadRepository.getById(id);
 
         if (!actividad) {
-            return res.status(404).json({ success: false, error: `No se encontró una actividad con el ID ${id}.` });
+            return ApiResponse.send(false, `No se encontró una actividad con el ID ${id}.`, null, res, 404);
         }
 
-        res.json({ success: true, data: actividad });
+        return ApiResponse.send(true, "Actividad obtenida con éxito.", actividad, res);
     } catch (error) {
         console.error("❌ Error en GET /actividades/:id:", error);
-        res.status(500).json({ success: false, error: "Error interno al obtener la actividad." });
+        return ApiResponse.send(false, "Error interno al obtener la actividad.", null, res, 500);
     }
 };
+
