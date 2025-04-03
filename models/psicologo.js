@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Psicologo = sequelize.define("Psicologo", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    id_persona: { type: DataTypes.INTEGER, allowNull: false },
+    id_persona: { type: DataTypes.INTEGER, allowNull: false, references: { model: "Personas", key: "id" } },
     especialidad: { type: DataTypes.STRING(255) },
     experiencia: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 0 } },
     horario_disponible: { type: DataTypes.TEXT }

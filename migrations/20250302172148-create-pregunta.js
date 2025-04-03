@@ -12,6 +12,10 @@ module.exports = {
       id_test: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Tests",
+          key: "id"
+        },
       },
       numero_pregunta: {
         type: Sequelize.INTEGER,

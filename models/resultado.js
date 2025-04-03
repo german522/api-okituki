@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Resultado = sequelize.define("Resultado", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    id_usuario: { type: DataTypes.INTEGER, allowNull: false },
-    id_test: { type: DataTypes.INTEGER, allowNull: false },
+    id_usuario: { type: DataTypes.INTEGER, allowNull: false, references: { model: "Usuarios", key: "id" } },
+    id_test: { type: DataTypes.INTEGER, allowNull: false, references: { model: "Tests", key: "id" } },
     puntaje_total: { type: DataTypes.INTEGER, allowNull: false },
     nivel_estres: { type: DataTypes.ENUM("Bajo", "Moderado", "Alto"), allowNull: false },
     fecha_realizacion: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }

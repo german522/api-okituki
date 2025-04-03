@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const RespuestaUsuarioActividad = sequelize.define("RespuestaUsuarioActividad", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    id_actividad_usuario: { type: DataTypes.INTEGER, allowNull: false },
+    id_actividad_usuario: { type: DataTypes.INTEGER, allowNull: false, references: { model: "Actividades_Usuario", key: "id" } },
     respuesta_texto: {
       type: DataTypes.ENUM("Excelente", "Buena", "Regular", "No me sirvió"),
       allowNull: false

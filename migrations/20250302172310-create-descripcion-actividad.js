@@ -12,6 +12,10 @@ module.exports = {
       id_actividad: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Actividades",
+          key: "id"
+        },
       },
       numero_paso: {
         type: Sequelize.INTEGER,

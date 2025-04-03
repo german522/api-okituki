@@ -12,6 +12,10 @@ module.exports = {
       id_actividad_usuario: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Actividades_Usuario",
+          key: "id"
+        },
       },
       respuesta_texto: {
         type: Sequelize.ENUM("Excelente", "Buena", "Regular", "No me sirvio"),

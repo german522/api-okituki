@@ -12,14 +12,29 @@ module.exports = {
       id_resultado: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Resultados", // ✅ Debe coincidir con la migración de Resultados
+          key: "id"
+        },
+        onDelete: "CASCADE"
       },
       id_pregunta: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Preguntas", // ✅ Debe coincidir con la migración de Preguntas
+          key: "id"
+        },
+        onDelete: "CASCADE"
       },
       id_respuesta: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Respuestas", // ✅ Debe coincidir con la migración de Respuestas
+          key: "id"
+        },
+        onDelete: "CASCADE"
       }
     },
       {

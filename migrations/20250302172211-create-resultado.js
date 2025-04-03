@@ -12,10 +12,18 @@ module.exports = {
       id_usuario: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Usuarios",
+          key: "id"
+        },
       },
       id_test: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Tests",
+          key: "id"
+        },
       },
       puntaje_total: {
         type: Sequelize.INTEGER,

@@ -12,8 +12,9 @@ module.exports = {
       id_pregunta: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "Pregunta", key: "id" },
+        references: { model: "Preguntas", key: "id" },
         onDelete: "CASCADE",
+        onUpdate: "CASCADE"
       },
       respuesta_texto: {
         type: Sequelize.TEXT,
@@ -23,10 +24,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       }
-    },
-      {
-        tableName: "Respuestas"
-      });
+    }, {
+      tableName: "Respuestas"
+    });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Respuestas');
