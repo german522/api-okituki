@@ -12,6 +12,8 @@ module.exports = {
       id_pregunta: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: "Pregunta", key: "id" },
+        onDelete: "CASCADE",
       },
       respuesta_texto: {
         type: Sequelize.TEXT,

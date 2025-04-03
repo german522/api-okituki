@@ -9,6 +9,7 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT
   },
+  //Se añade el modo de produccion para railway
   production: {
     username: process.env.PROD_DB_USERNAME,
     password: process.env.PROD_DB_PASSWORD,
