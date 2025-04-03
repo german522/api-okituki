@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const ActividadUsuario = sequelize.define("ActividadUsuario", {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    id_usuario: { type: DataTypes.INTEGER, allowNull: false },
-    id_actividad: { type: DataTypes.INTEGER, allowNull: false },
+    id_usuario: { type: DataTypes.INTEGER, allowNull: false, references: { model: "Usuarios", key: "id" } },
+    id_actividad: { type: DataTypes.INTEGER, allowNull: false, references: { model: "Actividades", key: "id" } },
     fecha_realizacion: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     estado: {
       type: DataTypes.ENUM("Activa", "Pendiente", "Completada", "Terminada"),

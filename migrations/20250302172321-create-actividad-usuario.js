@@ -12,10 +12,18 @@ module.exports = {
       id_usuario: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Usuarios",
+          key: "id"
+        },
       },
       id_actividad: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Actividades",
+          key: "id"
+        },
       },
       fecha_realizacion: {
         type: Sequelize.DATE

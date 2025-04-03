@@ -22,12 +22,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    tableName: "respuestas",
+    tableName: "Respuestas",
     timestamps: false
   });
 
   Respuesta.associate = (models) => {
-    Respuesta.belongsTo(models.Pregunta, { foreignKey: "id_pregunta", as: "pregunta" });
+    Respuesta.belongsTo(models.Pregunta, {
+      foreignKey: {
+        name: "fk_respuesta_pregunta", // Nombre único para la clave foránea
+        allowNull: false
+      },
+      onDelete: "CASCADE"
+    });
   };
 
   return Respuesta;
