@@ -2,7 +2,16 @@ const { Test, Pregunta, Respuesta } = require("../models");
 
 class TestRepository {
     async getAll() {
-        return await Test.findAll();
+        return await Test.findAll({
+            include: {
+                model: Pregunta,
+                as: "preguntas",
+                include: {
+                    model: Respuesta,
+                    as: "respuestas",
+                },
+            },
+        });
     }
 
     async getById(id) {

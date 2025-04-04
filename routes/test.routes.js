@@ -5,6 +5,6 @@ const authMiddleware = require("../middlewares/authMiddleware"); // Middleware d
 
 // Rutas para tests
 testRouter.get("/", authMiddleware, testController.getAll);
-testRouter.get("/:id", authMiddleware, testController.obtenerTestPorId);
+testRouter.get("/:id", authMiddleware, testController.getById);
 
 module.exports = testRouter;

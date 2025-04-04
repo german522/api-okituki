@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   Respuesta.associate = (models) => {
     Respuesta.belongsTo(models.Pregunta, {
       foreignKey: {
-        name: "fk_respuesta_pregunta", // Nombre único para la clave foránea
+        name: "id_pregunta",
         allowNull: false
       },
       onDelete: "CASCADE"
