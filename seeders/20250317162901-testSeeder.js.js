@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert("tests", [
+    return queryInterface.bulkInsert("Tests", [
       {
         id: 1,
         nombre: "Test inicial para la identificación del estrés.",
@@ -38,6 +38,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("tests", null, {}); // Esto elimina los datos insertados
+    return queryInterface.bulkDelete("Tests", null, {}); // Esto elimina los datos insertados
   }
 };

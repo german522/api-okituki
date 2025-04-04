@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert("descripcion_actividad", [
+    return queryInterface.bulkInsert("Descripcion_Actividad", [
       {
         id: 1,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
