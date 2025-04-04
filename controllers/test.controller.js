@@ -1,9 +1,12 @@
 const testRepository = require("../repository/test.repository");
 const ApiResponse = require("../utils/ApiResponse");
 
-const obtenerTestPorId = async (req, res) => {
+const getById = async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id) || id <= 0) {
+            return ApiResponse.send(false, "ID de test no válido.", null, res, 400);
+        }
         const test = await testRepository.getById(id);
 
         if (!test) {
@@ -50,7 +53,7 @@ const getAll = async (req, res) => {
     }
 };
 
-const getById = async (req, res) => {
+/*const getById = async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
 
@@ -69,6 +72,6 @@ const getById = async (req, res) => {
         console.error("❌ Error en GET /tests/:id:", error);
         return ApiResponse.send(false, "Error interno al obtener el test.", null, res, 500);
     }
-};
+};*/
 
-module.exports = { obtenerTestPorId, getAll, getById };
+module.exports = { getAll, getById };
