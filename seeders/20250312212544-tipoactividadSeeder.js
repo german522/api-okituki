@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert("tipo_actividades", [
+    return queryInterface.bulkInsert("Tipo_Actividades", [
       {
         id: 1,
         nombre: "Ejercicios de respiración",
@@ -28,6 +28,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("tipo_actividades", null, {}); // Esto elimina los datos insertados
+    return queryInterface.bulkDelete("Tipo_Actividades", null, {}); // Esto elimina los datos insertados
   }
 };

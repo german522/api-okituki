@@ -1,9 +1,12 @@
 const respuestaRepository = require("../repository/respuesta.repository");
 const ApiResponse = require("../utils/ApiResponse");
 
+const { Respuesta } = require("../models");
+
 exports.getAll = async (req, res) => {
     try {
-        const respuestas = await respuestaRepository.getAll();
+        const respuestas = await Respuesta.findAll();
+        console.log("Respuestas encontradas:", respuestas);
 
         if (!respuestas || respuestas.length === 0) {
             return ApiResponse.send(false, "No se encontraron respuestas en el catálogo.", null, res, 404);
@@ -15,6 +18,7 @@ exports.getAll = async (req, res) => {
         return ApiResponse.send(false, "Error interno al obtener las respuestas.", null, res, 500);
     }
 };
+
 
 exports.getById = async (req, res) => {
     try {
