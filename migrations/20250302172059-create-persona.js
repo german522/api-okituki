@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.TEXT
       }
     }, {
-      // Aquí puedes asegurarte de que la tabla no sea pluralizada
+
       tableName: "Personas"  // Especifica exactamente el nombre de la tabla
     });
   },

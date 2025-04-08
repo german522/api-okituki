@@ -11,11 +11,12 @@ module.exports = {
       },
       id_persona: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Personas",
           key: "id"
         },
+        onDelete: "SET NULL"
       },
       contrasena: {
         type: Sequelize.STRING(255),

@@ -15,7 +15,8 @@ const actividadRoutes = require("./actividad.routes");
 const descripcionActividadRoutes = require("./descripcionactividad.routes");
 const actividadUsuarioRoutes = require("./actividadusuario.routes");
 const respuestasUsuarioActividadesRoutes = require("./respuestasusuarioactividades.routes");
-const authRoutes = require("./auth.routes"); // ✅ Agregar autenticación
+const authRoutes = require("./auth.routes");
+const perfilRoutes = require("./perfil.routes");
 
 // Usar las rutas
 router.use("/personas", personaRoutes);
@@ -31,6 +32,7 @@ router.use("/actividades", actividadRoutes);
 router.use("/descripcionactividad", descripcionActividadRoutes);
 router.use("/actividadesusuario", actividadUsuarioRoutes);
 router.use("/respuestasusuarioactividades", respuestasUsuarioActividadesRoutes);
-router.use("/auth", authRoutes); // ✅ Agregar autenticación
+router.use("/auth", authRoutes);
+router.use("/perfil", perfilRoutes);
 
 module.exports = router;
