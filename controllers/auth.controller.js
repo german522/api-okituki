@@ -1,11 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { Usuario, Persona, RefreshToken } = require("../models");
+const { Usuario, Persona, RefreshToken, sequelize } = require("../models");
 const ApiResponse = require("../utils/ApiResponse");
 
 exports.register = async (req, res) => {
     try {
-        const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad } = req.body;
+        const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad, telefono } = req.body;
 
         if (!nombre || !apellido || !correo || !contrasena || !tipo) {
             return ApiResponse.send(false, "Todos los campos obligatorios (nombre, apellido, correo, contrasena, tipo) deben estar completos.", null, res, 400);
@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(contrasena, salt);
 
-        const persona = await Persona.create({ nombre, apellido, correo, tipo });
+        const persona = await Persona.create({ nombre, apellido, correo, tipo, telefono });
 
         await Usuario.create({
             id_persona: persona.id,
@@ -45,33 +45,70 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
+
         if (!correo || !contrasena) {
             return ApiResponse.send(false, "Correo y contraseña son obligatorios.", null, res, 400);
         }
 
-        const persona = await Persona.findOne({ where: { correo }, include: [{ model: Usuario }] });
-        if (!persona || !persona.Usuario) {
+        const persona = await Persona.findOne({
+            where: { correo },
+            include: [{ model: Usuario, as: "usuario" }]
+        });
+
+        if (!persona || !persona.usuario) {
             return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
         }
 
-        const passwordMatch = await bcrypt.compare(contrasena, persona.Usuario.contrasena);
+        const passwordMatch = await bcrypt.compare(contrasena, persona.usuario.contrasena);
         if (!passwordMatch) {
             return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
         }
 
-        // Generar tokens
-        const accessToken = jwt.sign({ id: persona.Usuario.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        const refreshToken = jwt.sign({ id: persona.Usuario.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+        const accessToken = jwt.sign({ id: persona.usuario.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const refreshToken = jwt.sign({ id: persona.usuario.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
-        // Guardar Refresh Token en la BD
-        await RefreshToken.create({ usuarioId: persona.Usuario.id, token: refreshToken });
+        await RefreshToken.create({ usuarioId: persona.usuario.id, token: refreshToken });
 
         return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken }, res);
+
     } catch (error) {
         console.error("❌ Error en login:", error);
         return ApiResponse.send(false, "Error interno en inicio de sesión.", null, res, 500);
     }
 };
+
+exports.deleteUsuarioCompleto = async (req, res) => {
+    const idUsuario = req.params.id;
+    try {
+        await sequelize.transaction(async (t) => {
+            const usuario = await Usuario.findByPk(idUsuario, { transaction: t });
+
+            if (!usuario) {
+                return ApiResponse.send(false, "Usuario no encontrado", null, res, 404);
+            }
+
+            const personaId = usuario.id_persona; // <- CAMBIO AQUÍ
+
+            await usuario.destroy({ transaction: t });
+
+            // Solo borra la persona si no hay otro usuario asociado a la misma persona (por si acaso)
+            const otrosUsuarios = await Usuario.findAll({
+                where: { id_persona: personaId }, // <- CAMBIO AQUÍ
+                transaction: t
+            });
+
+            if (otrosUsuarios.length === 0) {
+                await Persona.destroy({ where: { id: personaId }, transaction: t });
+            }
+        });
+
+        return ApiResponse.send(true, "Usuario y persona eliminados correctamente.", null, res);
+    } catch (error) {
+        console.error("❌ Error al eliminar usuario y persona:", error);
+        return ApiResponse.send(false, "Error al eliminar usuario y persona.", null, res, 500);
+    }
+};
+
 
 // PERFIL
 exports.perfil = async (req, res) => {
@@ -82,7 +119,7 @@ exports.perfil = async (req, res) => {
 
         const usuario = await Usuario.findOne({
             where: { id: req.user.id },
-            include: { model: Persona }
+            include: { model: Persona, as: "persona" }
         });
 
         if (!usuario) {
@@ -91,10 +128,11 @@ exports.perfil = async (req, res) => {
 
         const data = {
             id: usuario.id,
-            nombre: usuario.Persona.nombre,
-            apellido: usuario.Persona.apellido,
-            correo: usuario.Persona.correo,
-            tipo: usuario.Persona.tipo,
+            nombre: usuario.persona.nombre,
+            apellido: usuario.persona.apellido,
+            correo: usuario.persona.correo,
+            tipo: usuario.persona.tipo,
+            telefono: usuario.persona.telefono,
             fecha_nacimiento: usuario.fecha_nacimiento,
             genero: usuario.genero,
             discapacidad: usuario.discapacidad
