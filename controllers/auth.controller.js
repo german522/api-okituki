@@ -69,7 +69,19 @@ exports.login = async (req, res) => {
 
         await RefreshToken.create({ usuarioId: persona.usuario.id, token: refreshToken });
 
-        return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken }, res);
+        const perfil = {
+            id: persona.usuario.id,
+            nombre: persona.nombre,
+            apellido: persona.apellido,
+            correo: persona.correo,
+            tipo: persona.tipo,
+            telefono: persona.telefono,
+            fecha_nacimiento: persona.usuario.fecha_nacimiento,
+            genero: persona.usuario.genero,
+            discapacidad: persona.usuario.discapacidad
+        };
+
+        return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken, perfil }, res);
 
     } catch (error) {
         console.error("❌ Error en login:", error);
