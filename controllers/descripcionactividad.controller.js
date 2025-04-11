@@ -9,11 +9,17 @@ exports.getAll = async (req, res) => {
             return ApiResponse.send(false, "No se encontraron descripciones de actividad en el catálogo.", null, res, 404);
         }
 
-        // Construir la URL completa de la imagen para cada registro
-        const descripcionesConURLs = descripciones.map(descripcion => ({
-            ...descripcion,
-            URL_imagen: descripcion.URL_imagen ? `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}` : null
-        }));
+        // Convertir cada instancia a objeto plano y construir URL de imagen
+        const descripcionesConURLs = descripciones.map(d => {
+            const descripcion = d.get({ plain: true });
+
+            return {
+                ...descripcion,
+                URL_imagen: descripcion.URL_imagen
+                    ? `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}`
+                    : null
+            };
+        });
 
         return ApiResponse.send(true, "Descripciones de actividad obtenidas con éxito.", descripcionesConURLs, res);
     } catch (error) {
@@ -36,10 +42,13 @@ exports.getById = async (req, res) => {
             return ApiResponse.send(false, `No se encontró una descripción de actividad con el ID ${id}.`, null, res, 404);
         }
 
-        // Construir la URL completa de la imagen
-        descripcion.URL_imagen = descripcion.URL_imagen ? `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}` : null;
+        // Convertir a objeto plano y construir URL
+        const descripcionPlana = descripcion.get({ plain: true });
+        descripcionPlana.URL_imagen = descripcionPlana.URL_imagen
+            ? `${req.protocol}://${req.get("host")}${descripcionPlana.URL_imagen}`
+            : null;
 
-        return ApiResponse.send(true, "Descripción de actividad obtenida con éxito.", descripcion, res);
+        return ApiResponse.send(true, "Descripción de actividad obtenida con éxito.", descripcionPlana, res);
     } catch (error) {
         console.error("❌ Error en GET /descripcion_actividad/:id:", error);
         return ApiResponse.send(false, "Error interno al obtener la descripción de actividad.", null, res, 500);
