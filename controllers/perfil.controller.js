@@ -4,7 +4,7 @@ const ApiResponse = require("../utils/ApiResponse");
 
 exports.updatePerfil = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.user; // ID sacado del JWT
         const { personaData, usuarioData } = req.body;
 
         // Buscar usuario para obtener id_persona
@@ -26,7 +26,7 @@ exports.updatePerfil = async (req, res) => {
             usuario: usuarioActualizado
         }, res);
     } catch (error) {
-        console.error("❌ Error en PUT /perfil/:id:", error);
+        console.error("❌ Error en PUT /perfil:", error);
         return ApiResponse.send(false, "Error al actualizar perfil.", null, res, 500);
     }
 };
