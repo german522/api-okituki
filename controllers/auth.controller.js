@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Usuario, Persona, RefreshToken, sequelize } = require("../models");
 const ApiResponse = require("../utils/ApiResponse");
+const UsuarioRepository = require("../repository/usuario.repository");
+const usuarioRepository = require("../repository/usuario.repository");
 
 exports.register = async (req, res) => {
     try {
@@ -25,13 +27,7 @@ exports.register = async (req, res) => {
 
         const persona = await Persona.create({ nombre, apellido, correo, tipo, telefono });
 
-        await Usuario.create({
-            id_persona: persona.id,
-            contrasena: hashedPassword,
-            fecha_nacimiento,
-            genero,
-            discapacidad
-        });
+        usuarioRepository.create({ id_persona: persona.id, contrasena: hashedPassword, fecha_nacimiento, genero, discapacidad });
 
         return ApiResponse.send(true, "Usuario registrado correctamente.", null, res, 201);
 
@@ -69,19 +65,7 @@ exports.login = async (req, res) => {
 
         await RefreshToken.create({ usuarioId: persona.usuario.id, token: refreshToken });
 
-        const perfil = {
-            id: persona.usuario.id,
-            nombre: persona.nombre,
-            apellido: persona.apellido,
-            correo: persona.correo,
-            tipo: persona.tipo,
-            telefono: persona.telefono,
-            fecha_nacimiento: persona.usuario.fecha_nacimiento,
-            genero: persona.usuario.genero,
-            discapacidad: persona.usuario.discapacidad
-        };
-
-        return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken, perfil }, res);
+        return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken, persona }, res);
 
     } catch (error) {
         console.error("❌ Error en login:", error);
