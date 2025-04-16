@@ -9,7 +9,6 @@ exports.getAll = async (req, res) => {
             return ApiResponse.send(false, "No se encontraron descripciones de actividad en el catálogo.", null, res, 404);
         }
 
-        // Convertir cada instancia a objeto plano y construir URL de imagen
         const descripcionesConURLs = descripciones.map(d => {
             const descripcion = d.get({ plain: true });
 
@@ -42,13 +41,13 @@ exports.getById = async (req, res) => {
             return ApiResponse.send(false, `No se encontró una descripción de actividad con el ID ${id}.`, null, res, 404);
         }
 
-        // Convertir a objeto plano y construir URL
-        const descripcionPlana = descripcion.get({ plain: true });
-        descripcionPlana.URL_imagen = descripcionPlana.URL_imagen
-            ? `${req.protocol}://${req.get("host")}${descripcionPlana.URL_imagen}`
-            : null;
+        if (!descripcion.URL_imagen || descripcion.URL_imagen.trim() === "") {
+            delete descripcion.URL_imagen;
+        } else {
+            descripcion.URL_imagen = `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}`;
+        }
 
-        return ApiResponse.send(true, "Descripción de actividad obtenida con éxito.", descripcionPlana, res);
+        return ApiResponse.send(true, "Descripción de actividad obtenida con éxito.", descripcion, res);
     } catch (error) {
         console.error("❌ Error en GET /descripcion_actividad/:id:", error);
         return ApiResponse.send(false, "Error interno al obtener la descripción de actividad.", null, res, 500);

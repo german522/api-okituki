@@ -1,4 +1,5 @@
 const { Actividad } = require("../models");
+const tipoActividadRepository = require("./tipoactividad.repository");
 
 class ActividadRepository {
     async getAll() {
@@ -6,7 +7,16 @@ class ActividadRepository {
     }
 
     async getById(id) {
-        return await Actividad.findByPk(id);
+        const actividad = await Actividad.findByPk(id);
+        if (!actividad) return null;
+        const tipoActividad = await tipoActividadRepository.getById(actividad.id_tipo_actividades);
+
+        return {
+            id: actividad.id,
+            nombre: actividad.nombre,
+            descripcion: actividad.descripcion,
+            tipo_actividad: tipoActividad,
+        }
     }
 }
 
