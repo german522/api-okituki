@@ -25,6 +25,14 @@ class UsuarioRepository {
         await usuario.destroy();
         return true;
     }
+
+    async updatePasswordByPersonaId(id_persona, hashedPassword) {
+        const usuario = await Usuario.findOne({ where: { id_persona } });
+        if (!usuario) throw new Error('Usuario no encontrado');
+        usuario.contrasena = hashedPassword;
+        await usuario.save();
+        return usuario;
+    }
 }
 
 module.exports = new UsuarioRepository();
