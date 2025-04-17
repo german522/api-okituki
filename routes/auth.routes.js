@@ -16,5 +16,6 @@ router.post("/logout", authController.logout);
 router.get("/perfil", authMiddleware, authController.perfil);
 router.post("/reenviar-codigo", authController.reenviarCodigo);
 router.post('/recuperar-contrasena', authController.recuperarContrasena);
+router.put('/actualizar-contrasena', authMiddleware, authController.actualizarContrasena);
 
 module.exports = router;
