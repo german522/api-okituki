@@ -30,6 +30,10 @@ exports.register = async (req, res) => {
             return ApiResponse.send(false, "El correo ingresado ya está registrado, ingrese uno nuevo, por favor.", null, res, 400);
         }
 
+        if (!esContrasenaSegura(contrasena)) {
+            return ApiResponse.send(false, "La contraseña no es segura. Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.", null, res, 400);
+        }
+
         const hashedPassword = await bcrypt.hash(contrasena, 10);
 
         const codigo = Math.floor(100000 + Math.random() * 900000).toString();
@@ -136,6 +140,10 @@ exports.actualizarContrasena = async (req, res) => {
 
         if (nuevaContrasena !== confirmarContrasena) {
             return ApiResponse.send(false, 'Las nuevas contraseñas no coinciden.', null, res, 400);
+        }
+
+        if (!esContrasenaSegura(nuevaContrasena)) {
+            return ApiResponse.send(false, "La nueva contraseña no es segura. Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.", null, res, 400);
         }
 
         const usuario = await Usuario.findByPk(idUsuario);
@@ -330,4 +338,10 @@ exports.reenviarCodigo = async (req, res) => {
         console.error("❌ Error al reenviar código:", error);
         return ApiResponse.send(false, "Error interno al reenviar el código.", null, res, 500);
     }
+};
+
+
+const esContrasenaSegura = (contrasena) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return regex.test(contrasena);
 };
