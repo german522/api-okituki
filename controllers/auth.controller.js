@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
         const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad, telefono } = req.body;
 
         if (!nombre || !apellido || !correo || !contrasena || !tipo) {
-            return res.status(400).json({ success: false, message: "Faltan campos obligatorios." });
+            return ApiResponse.send(false, "Por favor, asegúrese de llenar todos los campos.", null, res, 400);
         }
 
         const esCorreoValido = (correo) => {
@@ -20,13 +20,14 @@ exports.register = async (req, res) => {
         };
 
         if (!esCorreoValido(correo)) {
-            return res.status(400).json({ success: false, message: "Correo con dominio no válido." });
+            return ApiResponse.send(false, "Ingrese un formato de correo válido, por favor.", null, res, 400);
+
         }
 
         const personaExistente = await Persona.findOne({ where: { correo } });
 
         if (personaExistente) {
-            return res.status(400).json({ success: false, message: "Correo ya registrado." });
+            return ApiResponse.send(false, "El correo ingresado ya está registrado, ingrese uno nuevo, por favor.", null, res, 400);
         }
 
         const hashedPassword = await bcrypt.hash(contrasena, 10);
@@ -45,16 +46,11 @@ exports.register = async (req, res) => {
         await enviarCodigo(correo, codigo);
 
         const tokenVerificacion = jwt.sign({ correo }, process.env.JWT_SECRET, { expiresIn: "15m" });
-
-        res.status(201).json({
-            success: true,
-            message: "Registro exitoso. Revisa tu correo para verificar.",
-            tokenVerificacion
-        });
+        return ApiResponse.send(true, "Registro exitoso. Revisa tu correo para verificar tu cuenta e iniciar sesión.", { tokenVerificacion }, res, 201);
 
     } catch (error) {
         console.error("❌ Error en registro:", error);
-        res.status(500).json({ success: false, message: "Error interno." });
+        return ApiResponse.send(false, "Error interno en el registro.", null, res, 500);
     }
 };
 
@@ -108,13 +104,12 @@ exports.deleteUsuarioCompleto = async (req, res) => {
                 return ApiResponse.send(false, "Usuario no encontrado", null, res, 404);
             }
 
-            const personaId = usuario.id_persona; // <- CAMBIO AQUÍ
+            const personaId = usuario.id_persona;
 
             await usuario.destroy({ transaction: t });
 
-            // Solo borra la persona si no hay otro usuario asociado a la misma persona (por si acaso)
             const otrosUsuarios = await Usuario.findAll({
-                where: { id_persona: personaId }, // <- CAMBIO AQUÍ
+                where: { id_persona: personaId },
                 transaction: t
             });
 
@@ -130,22 +125,58 @@ exports.deleteUsuarioCompleto = async (req, res) => {
     }
 };
 
+exports.actualizarContrasena = async (req, res) => {
+    try {
+        const idUsuario = req.user.id;
+        const { contrasenaActual, nuevaContrasena, confirmarContrasena } = req.body;
+
+        if (!contrasenaActual || !nuevaContrasena || !confirmarContrasena) {
+            return ApiResponse.send(false, 'Todos los campos son obligatorios.', null, res, 400);
+        }
+
+        if (nuevaContrasena !== confirmarContrasena) {
+            return ApiResponse.send(false, 'Las nuevas contraseñas no coinciden.', null, res, 400);
+        }
+
+        const usuario = await Usuario.findByPk(idUsuario);
+        if (!usuario) {
+            return ApiResponse.send(false, 'Usuario no encontrado.', null, res, 404);
+        }
+
+        const match = await bcrypt.compare(contrasenaActual, usuario.contrasena);
+        if (!match) {
+            return ApiResponse.send(false, 'La contraseña actual no es correcta.', null, res, 401);
+        }
+
+        const hashedNewPassword = await bcrypt.hash(nuevaContrasena, 10);
+        usuario.contrasena = hashedNewPassword;
+        await usuario.save();
+
+        return ApiResponse.send(true, 'Contraseña actualizada correctamente.', null, res);
+
+    } catch (error) {
+        console.error('❌ Error al actualizar contraseña:', error);
+        return ApiResponse.send(false, 'Error interno al actualizar la contraseña.', null, res, 500);
+    }
+};
+
 exports.verificarCodigo = async (req, res) => {
     try {
         const { codigo } = req.body;
         const correo = req.correo;
 
         const persona = await Persona.findOne({ where: { correo } });
-        if (!persona) return res.status(404).json({ success: false, message: "Usuario no encontrado." });
+        if (!persona) return ApiResponse.send(false, "El usuario no existe, inténtelo de nuevo.", null, res, 404);
 
-        if (persona.verificado) return res.status(400).json({ success: false, message: "El correo ya está verificado." });
+        if (persona.verificado)
+            return ApiResponse.send(false, "Su cuenta ya está verificada.", null, res, 400);
 
         if (persona.codigo_verificacion !== codigo) {
-            return res.status(400).json({ success: false, message: "Código incorrecto." });
+            return ApiResponse.send(false, "El código ingresado es incorrecto", null, res, 400);
         }
 
         if (new Date() > persona.codigo_expiracion) {
-            return res.status(400).json({ success: false, message: "El código ha expirado." });
+            return ApiResponse.send(false, "El código ha expirado, intente generando uno nuevo.", null, res, 400);
         }
 
         persona.verificado = true;
@@ -153,11 +184,11 @@ exports.verificarCodigo = async (req, res) => {
         persona.codigo_expiracion = null;
         await persona.save();
 
-        res.status(200).json({ success: true, message: "Correo verificado con éxito." });
+        return ApiResponse.send(true, "Correo verificado con éxito.", null, res);
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: "Error al verificar código." });
+        return ApiResponse.send(false, "Error al verificar el código.", null, res, 500);
     }
 };
 
@@ -223,10 +254,12 @@ exports.recuperarContrasena = async (req, res) => {
     try {
         const { correo } = req.body;
 
-        if (!correo) return res.status(400).json({ message: 'El correo es obligatorio' });
+        if (!correo)
+            return ApiResponse.send(false, "El correo es obligatorio para recuperar tu contraseña", null, res, 400);
 
         const persona = await Persona.findOne({ where: { correo } });
-        if (!persona) return res.status(404).json({ message: 'Correo no encontrado en el sistema' });
+        if (!persona)
+            return ApiResponse.send(false, "El correo no está registrado en el sistema", null, res, 404);
 
         const nuevaContraseña = generateRandomPassword();
         const hashedPassword = await bcrypt.hash(nuevaContraseña, 10);
@@ -235,11 +268,11 @@ exports.recuperarContrasena = async (req, res) => {
 
         await enviarCodigo(correo, nuevaContraseña, 'password');
 
-        return res.status(200).json({ message: 'Se ha enviado una nueva contraseña al correo proporcionado' });
+        return ApiResponse.send(true, "Se ha enviado una nueva contraseña al correo proporcionado", null, res);
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Ocurrió un error al recuperar la contraseña' });
+        return ApiResponse.send(false, "Ocurrió un error al recuperar la contraseña", null, res, 500);
     }
 };
 
@@ -263,7 +296,7 @@ exports.reenviarCodigo = async (req, res) => {
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({ success: false, message: "Token no proporcionado." });
+            return ApiResponse.send(false, "Token no proporcionado.", null, res, 401);
         }
 
         const token = authHeader.split(" ")[1];
@@ -273,11 +306,11 @@ exports.reenviarCodigo = async (req, res) => {
         const persona = await Persona.findOne({ where: { correo } });
 
         if (!persona) {
-            return res.status(404).json({ success: false, message: "Correo no registrado." });
+            return ApiResponse.send(false, "El correo no está registrado.", null, res, 404);
         }
 
         if (persona.verificado) {
-            return res.status(400).json({ success: false, message: "El correo ya ha sido verificado." });
+            return ApiResponse.send(false, "El correo ya ha sido verificado.", null, res, 400);
         }
 
         const nuevoCodigo = Math.floor(100000 + Math.random() * 900000).toString();
@@ -291,14 +324,10 @@ exports.reenviarCodigo = async (req, res) => {
 
         const tokenVerificacion = jwt.sign({ correo }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
-        res.status(200).json({
-            success: true,
-            message: "Nuevo código reenviado correctamente.",
-            tokenVerificacion
-        });
+        return ApiResponse.send(true, "Nuevo código enviado al correo.", { tokenVerificacion }, res);
 
     } catch (error) {
         console.error("❌ Error al reenviar código:", error);
-        res.status(500).json({ success: false, message: "Error interno del servidor." });
+        return ApiResponse.send(false, "Error interno al reenviar el código.", null, res, 500);
     }
 };
