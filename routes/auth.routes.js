@@ -15,5 +15,6 @@ router.delete("/usuario/:id", authController.deleteUsuarioCompleto);
 router.post("/logout", authController.logout);
 router.get("/perfil", authMiddleware, authController.perfil);
 router.post("/reenviar-codigo", authController.reenviarCodigo);
+router.post('/recuperar-contrasena', authController.recuperarContrasena);
 
 module.exports = router;

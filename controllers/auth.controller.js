@@ -4,20 +4,11 @@ const { Usuario, Persona, RefreshToken, sequelize } = require("../models");
 const ApiResponse = require("../utils/ApiResponse");
 const { enviarCodigo } = require('../utils/mailer');
 const usuarioRepository = require("../repository/usuario.repository");
+const generateRandomPassword = require('../utils/passwordGenerator');
 
 exports.register = async (req, res) => {
     try {
-        const {
-            nombre,
-            apellido,
-            correo,
-            tipo,
-            contrasena,
-            fecha_nacimiento,
-            genero,
-            discapacidad,
-            telefono
-        } = req.body;
+        const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad, telefono } = req.body;
 
         if (!nombre || !apellido || !correo || !contrasena || !tipo) {
             return res.status(400).json({ success: false, message: "Faltan campos obligatorios." });
@@ -44,25 +35,11 @@ exports.register = async (req, res) => {
         const expiracion = new Date(Date.now() + 15 * 60000);
 
         const persona = await Persona.create({
-            nombre,
-            apellido,
-            correo,
-            tipo,
-            telefono,
-            verificado: false,
-            codigo_verificacion: codigo,
-            codigo_expiracion: expiracion,
-            fecha_nacimiento,
-            genero,
-            discapacidad
+            nombre, apellido, correo, tipo, telefono, verificado: false, codigo_verificacion: codigo, codigo_expiracion: expiracion, fecha_nacimiento, genero, discapacidad
         });
 
         await Usuario.create({
-            id_persona: persona.id,
-            contrasena: hashedPassword,
-            fecha_nacimiento,
-            genero,
-            discapacidad
+            id_persona: persona.id, contrasena: hashedPassword, fecha_nacimiento, genero, discapacidad
         });
 
         await enviarCodigo(correo, codigo);
@@ -242,6 +219,30 @@ exports.refreshToken = async (req, res) => {
     }
 };
 
+exports.recuperarContrasena = async (req, res) => {
+    try {
+        const { correo } = req.body;
+
+        if (!correo) return res.status(400).json({ message: 'El correo es obligatorio' });
+
+        const persona = await Persona.findOne({ where: { correo } });
+        if (!persona) return res.status(404).json({ message: 'Correo no encontrado en el sistema' });
+
+        const nuevaContraseña = generateRandomPassword();
+        const hashedPassword = await bcrypt.hash(nuevaContraseña, 10);
+
+        await usuarioRepository.updatePasswordByPersonaId(persona.id, hashedPassword);
+
+        await enviarCodigo(correo, nuevaContraseña, 'password');
+
+        return res.status(200).json({ message: 'Se ha enviado una nueva contraseña al correo proporcionado' });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Ocurrió un error al recuperar la contraseña' });
+    }
+};
+
 // LOGOUT
 exports.logout = async (req, res) => {
     try {
@@ -301,7 +302,3 @@ exports.reenviarCodigo = async (req, res) => {
         res.status(500).json({ success: false, message: "Error interno del servidor." });
     }
 };
-
-
-
-
