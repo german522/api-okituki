@@ -2,38 +2,82 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Usuario, Persona, RefreshToken, sequelize } = require("../models");
 const ApiResponse = require("../utils/ApiResponse");
-const UsuarioRepository = require("../repository/usuario.repository");
+const { enviarCodigo } = require('../utils/mailer');
 const usuarioRepository = require("../repository/usuario.repository");
 
 exports.register = async (req, res) => {
     try {
-        const { nombre, apellido, correo, tipo, contrasena, fecha_nacimiento, genero, discapacidad, telefono } = req.body;
+        const {
+            nombre,
+            apellido,
+            correo,
+            tipo,
+            contrasena,
+            fecha_nacimiento,
+            genero,
+            discapacidad,
+            telefono
+        } = req.body;
 
         if (!nombre || !apellido || !correo || !contrasena || !tipo) {
-            return ApiResponse.send(false, "Todos los campos obligatorios (nombre, apellido, correo, contrasena, tipo) deben estar completos.", null, res, 400);
+            return res.status(400).json({ success: false, message: "Faltan campos obligatorios." });
         }
 
-        if (tipo !== "usuario" && tipo !== "psicologo") {
-            return ApiResponse.send(false, "El campo 'tipo' debe ser 'usuario' o 'psicologo'.", null, res, 400);
+        const esCorreoValido = (correo) => {
+            const regex = /^[\w.-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|edu\.mx|gob\.mx|mx)$/i;
+            return regex.test(correo);
+        };
+
+        if (!esCorreoValido(correo)) {
+            return res.status(400).json({ success: false, message: "Correo con dominio no válido." });
         }
 
         const personaExistente = await Persona.findOne({ where: { correo } });
+
         if (personaExistente) {
-            return ApiResponse.send(false, "El correo ya está registrado.", null, res, 400);
+            return res.status(400).json({ success: false, message: "Correo ya registrado." });
         }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(contrasena, salt);
+        const hashedPassword = await bcrypt.hash(contrasena, 10);
 
-        const persona = await Persona.create({ nombre, apellido, correo, tipo, telefono });
+        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiracion = new Date(Date.now() + 15 * 60000);
 
-        usuarioRepository.create({ id_persona: persona.id, contrasena: hashedPassword, fecha_nacimiento, genero, discapacidad });
+        const persona = await Persona.create({
+            nombre,
+            apellido,
+            correo,
+            tipo,
+            telefono,
+            verificado: false,
+            codigo_verificacion: codigo,
+            codigo_expiracion: expiracion,
+            fecha_nacimiento,
+            genero,
+            discapacidad
+        });
 
-        return ApiResponse.send(true, "Usuario registrado correctamente.", null, res, 201);
+        await Usuario.create({
+            id_persona: persona.id,
+            contrasena: hashedPassword,
+            fecha_nacimiento,
+            genero,
+            discapacidad
+        });
+
+        await enviarCodigo(correo, codigo);
+
+        const tokenVerificacion = jwt.sign({ correo }, process.env.JWT_SECRET, { expiresIn: "15m" });
+
+        res.status(201).json({
+            success: true,
+            message: "Registro exitoso. Revisa tu correo para verificar.",
+            tokenVerificacion
+        });
 
     } catch (error) {
-        console.error("❌ Error en POST /register:", error);
-        return ApiResponse.send(false, "Error interno al registrar usuario.", null, res, 500);
+        console.error("❌ Error en registro:", error);
+        res.status(500).json({ success: false, message: "Error interno." });
     }
 };
 
@@ -58,6 +102,10 @@ exports.login = async (req, res) => {
         const passwordMatch = await bcrypt.compare(contrasena, persona.usuario.contrasena);
         if (!passwordMatch) {
             return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
+        }
+
+        if (!persona.verificado) {
+            return ApiResponse.send(false, "Debes verificar tu correo antes de iniciar sesión.", null, res, 401);
         }
 
         const accessToken = jwt.sign({ id: persona.usuario.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -105,6 +153,36 @@ exports.deleteUsuarioCompleto = async (req, res) => {
     }
 };
 
+exports.verificarCodigo = async (req, res) => {
+    try {
+        const { codigo } = req.body;
+        const correo = req.correo;
+
+        const persona = await Persona.findOne({ where: { correo } });
+        if (!persona) return res.status(404).json({ success: false, message: "Usuario no encontrado." });
+
+        if (persona.verificado) return res.status(400).json({ success: false, message: "El correo ya está verificado." });
+
+        if (persona.codigo_verificacion !== codigo) {
+            return res.status(400).json({ success: false, message: "Código incorrecto." });
+        }
+
+        if (new Date() > persona.codigo_expiracion) {
+            return res.status(400).json({ success: false, message: "El código ha expirado." });
+        }
+
+        persona.verificado = true;
+        persona.codigo_verificacion = null;
+        persona.codigo_expiracion = null;
+        await persona.save();
+
+        res.status(200).json({ success: true, message: "Correo verificado con éxito." });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error al verificar código." });
+    }
+};
 
 // PERFIL
 exports.perfil = async (req, res) => {
@@ -176,6 +254,51 @@ exports.logout = async (req, res) => {
     } catch (error) {
         console.error("❌ Error en logout:", error);
         return ApiResponse.send(false, "Error interno al cerrar sesión.", null, res, 500);
+    }
+};
+
+exports.reenviarCodigo = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ success: false, message: "Token no proporcionado." });
+        }
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const correo = decoded.correo;
+
+        const persona = await Persona.findOne({ where: { correo } });
+
+        if (!persona) {
+            return res.status(404).json({ success: false, message: "Correo no registrado." });
+        }
+
+        if (persona.verificado) {
+            return res.status(400).json({ success: false, message: "El correo ya ha sido verificado." });
+        }
+
+        const nuevoCodigo = Math.floor(100000 + Math.random() * 900000).toString();
+        const nuevaExpiracion = new Date(Date.now() + 15 * 60000); // 15 min
+
+        persona.codigo_verificacion = nuevoCodigo;
+        persona.codigo_expiracion = nuevaExpiracion;
+        await persona.save();
+
+        await enviarCodigo(correo, nuevoCodigo);
+
+        const tokenVerificacion = jwt.sign({ correo }, process.env.JWT_SECRET, { expiresIn: "15m" });
+
+        res.status(200).json({
+            success: true,
+            message: "Nuevo código reenviado correctamente.",
+            tokenVerificacion
+        });
+
+    } catch (error) {
+        console.error("❌ Error al reenviar código:", error);
+        res.status(500).json({ success: false, message: "Error interno del servidor." });
     }
 };
 
