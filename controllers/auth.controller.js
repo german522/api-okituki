@@ -99,7 +99,8 @@ exports.login = async (req, res) => {
 };
 
 exports.deleteUsuarioCompleto = async (req, res) => {
-    const idUsuario = req.params.id;
+    const idUsuario = req.user.id;
+
     try {
         await sequelize.transaction(async (t) => {
             const usuario = await Usuario.findByPk(idUsuario, { transaction: t });
