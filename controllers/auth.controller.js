@@ -58,7 +58,6 @@ exports.register = async (req, res) => {
     }
 };
 
-
 // LOGIN
 exports.login = async (req, res) => {
     try {
@@ -90,6 +89,13 @@ exports.login = async (req, res) => {
         const refreshToken = jwt.sign({ id: persona.usuario.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
         await RefreshToken.create({ usuarioId: persona.usuario.id, token: refreshToken });
+
+        // Eliminamos datos sensibles sin alterar el objeto principal
+        if (persona.usuario) {
+            persona.usuario.contrasena = undefined; // o null
+        }
+        persona.codigo_verificacion = undefined;
+        persona.codigo_expiracion = undefined;
 
         return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken, persona }, res);
 
@@ -341,38 +347,48 @@ exports.reenviarCodigo = async (req, res) => {
         }
 
         const token = authHeader.split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const correo = decoded.correo;
+        let datos;
 
-        const persona = await Persona.findOne({ where: { correo } });
-
-        if (!persona) {
-            return ApiResponse.send(false, "El correo no está registrado.", null, res, 404);
+        try {
+            datos = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (err) {
+            return ApiResponse.send(false, "Token inválido o expirado.", null, res, 401);
         }
 
-        if (persona.verificado) {
-            return ApiResponse.send(false, "El correo ya ha sido verificado.", null, res, 400);
+        const {
+            nombre, apellido, correo, tipo, telefono,
+            fecha_nacimiento, genero, discapacidad,
+            hashedPassword
+        } = datos;
+
+        if (!correo) {
+            return ApiResponse.send(false, "Token inválido. No se encontró el correo.", null, res, 400);
         }
 
         const nuevoCodigo = Math.floor(100000 + Math.random() * 900000).toString();
-        const nuevaExpiracion = new Date(Date.now() + 15 * 60000); // 15 min
-
-        persona.codigo_verificacion = nuevoCodigo;
-        persona.codigo_expiracion = nuevaExpiracion;
-        await persona.save();
+        const nuevaExpiracion = new Date(Date.now() + 15 * 60000);
 
         await enviarCodigo(correo, nuevoCodigo);
 
-        const tokenVerificacion = jwt.sign({ correo }, process.env.JWT_SECRET, { expiresIn: "15m" });
+        const nuevoToken = jwt.sign(
+            {
+                nombre, apellido, correo, tipo, telefono,
+                fecha_nacimiento, genero, discapacidad,
+                hashedPassword,
+                codigo: nuevoCodigo,
+                codigo_expiracion: nuevaExpiracion
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "15m" }
+        );
 
-        return ApiResponse.send(true, "Nuevo código enviado al correo.", { tokenVerificacion }, res);
+        return ApiResponse.send(true, "Nuevo código enviado al correo.", { tokenVerificacion: nuevoToken }, res, 200);
 
     } catch (error) {
         console.error("❌ Error al reenviar código:", error);
         return ApiResponse.send(false, "Error interno al reenviar el código.", null, res, 500);
     }
 };
-
 
 const esContrasenaSegura = (contrasena) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
