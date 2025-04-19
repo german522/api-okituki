@@ -10,7 +10,7 @@ router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.post("/refresh-token", authController.refreshToken);
 router.post("/verificar-codigo", verifyEmailToken, authController.verificarCodigo);
-router.delete("/usuario", authMiddleware, authController.deleteUsuarioCompleto);
+router.delete("/borrar-usuario", authMiddleware, authController.deleteUsuarioCompleto);
 router.post("/logout", authController.logout);
 router.get("/perfil", authMiddleware, authController.perfil);
 router.post("/reenviar-codigo", authController.reenviarCodigo);
