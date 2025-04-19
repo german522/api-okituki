@@ -33,14 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       verificado: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
-      },
-      codigo_verificacion: {
-        type: DataTypes.STRING(10),
-        allowNull: true
-      },
-      codigo_expiracion: {
-        type: DataTypes.DATE,
-        allowNull: true
       }
     },
     {
