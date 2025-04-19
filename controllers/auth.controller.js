@@ -21,7 +21,6 @@ exports.register = async (req, res) => {
 
         if (!esCorreoValido(correo)) {
             return ApiResponse.send(false, "Ingrese un formato de correo válido, por favor.", null, res, 400);
-
         }
 
         const personaExistente = await Persona.findOne({ where: { correo } });
@@ -39,24 +38,26 @@ exports.register = async (req, res) => {
         const codigo = Math.floor(100000 + Math.random() * 900000).toString();
         const expiracion = new Date(Date.now() + 15 * 60000);
 
-        const persona = await Persona.create({
-            nombre, apellido, correo, tipo, telefono, verificado: false, codigo_verificacion: codigo, codigo_expiracion: expiracion, fecha_nacimiento, genero, discapacidad
-        });
-
-        await Usuario.create({
-            id_persona: persona.id, contrasena: hashedPassword, fecha_nacimiento, genero, discapacidad
-        });
+        const datosTemporales = {
+            nombre, apellido, correo, tipo, telefono,
+            fecha_nacimiento, genero, discapacidad,
+            hashedPassword,
+            codigo,
+            codigo_expiracion: expiracion
+        };
 
         await enviarCodigo(correo, codigo);
 
-        const tokenVerificacion = jwt.sign({ correo }, process.env.JWT_SECRET, { expiresIn: "15m" });
-        return ApiResponse.send(true, "Registro exitoso. Revisa tu correo para verificar tu cuenta e iniciar sesión.", { tokenVerificacion }, res, 201);
+        const tokenVerificacion = jwt.sign(datosTemporales, process.env.JWT_SECRET, { expiresIn: "15m" });
+
+        return ApiResponse.send(true, "Se envió un código de verificación a tu correo. Verifica para completar el registro.", { tokenVerificacion }, res, 200);
 
     } catch (error) {
         console.error("❌ Error en registro:", error);
         return ApiResponse.send(false, "Error interno en el registro.", null, res, 500);
     }
 };
+
 
 // LOGIN
 exports.login = async (req, res) => {
@@ -172,34 +173,65 @@ exports.actualizarContrasena = async (req, res) => {
 exports.verificarCodigo = async (req, res) => {
     try {
         const { codigo } = req.body;
-        const correo = req.correo;
+        const token = req.headers.authorization?.split(" ")[1];
 
-        const persona = await Persona.findOne({ where: { correo } });
-        if (!persona) return ApiResponse.send(false, "El usuario no existe, inténtelo de nuevo.", null, res, 404);
-
-        if (persona.verificado)
-            return ApiResponse.send(false, "Su cuenta ya está verificada.", null, res, 400);
-
-        if (persona.codigo_verificacion !== codigo) {
-            return ApiResponse.send(false, "El código ingresado es incorrecto", null, res, 400);
+        if (!token) {
+            return ApiResponse.send(false, "Token de verificación no proporcionado.", null, res, 401);
         }
 
-        if (new Date() > persona.codigo_expiracion) {
+        let datos;
+
+        try {
+            datos = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (err) {
+            return ApiResponse.send(false, "Token inválido o expirado.", null, res, 401);
+        }
+
+        const {
+            nombre, apellido, correo, tipo, telefono,
+            fecha_nacimiento, genero, discapacidad,
+            hashedPassword,
+            codigo: codigoGuardado,
+            codigo_expiracion
+        } = datos;
+
+        if (codigo !== codigoGuardado) {
+            return ApiResponse.send(false, "El código ingresado es incorrecto.", null, res, 400);
+        }
+
+        if (new Date() > new Date(codigo_expiracion)) {
             return ApiResponse.send(false, "El código ha expirado, intente generando uno nuevo.", null, res, 400);
         }
 
-        persona.verificado = true;
-        persona.codigo_verificacion = null;
-        persona.codigo_expiracion = null;
-        await persona.save();
+        const personaExistente = await Persona.findOne({ where: { correo } });
+        if (personaExistente) {
+            return ApiResponse.send(false, "El usuario ya fue registrado previamente.", null, res, 400);
+        }
 
-        return ApiResponse.send(true, "Correo verificado con éxito.", null, res);
+        const persona = await Persona.create({
+            nombre, apellido, correo, tipo, telefono,
+            verificado: true,
+            codigo_verificacion: null,
+            codigo_expiracion: null,
+            fecha_nacimiento, genero, discapacidad
+        });
+
+        await Usuario.create({
+            id_persona: persona.id,
+            contrasena: hashedPassword,
+            fecha_nacimiento,
+            genero,
+            discapacidad
+        });
+
+        return ApiResponse.send(true, "Correo verificado y usuario registrado con éxito.", null, res, 201);
 
     } catch (error) {
-        console.error(error);
+        console.error("❌ Error en verificación:", error);
         return ApiResponse.send(false, "Error al verificar el código.", null, res, 500);
     }
 };
+
 
 // PERFIL
 exports.perfil = async (req, res) => {
