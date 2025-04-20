@@ -1,9 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { Usuario, Persona, RefreshToken, sequelize } = require("../models");
 const ApiResponse = require("../utils/ApiResponse");
 const { enviarCodigo } = require('../utils/mailer');
 const usuarioRepository = require("../repository/usuario.repository");
+const personaRepository = require("../repository/persona.repository");
+const refreshTokenRepository = require("../repository/refreshtoken.repository");
 const generateRandomPassword = require('../utils/passwordGenerator');
 
 exports.register = async (req, res) => {
@@ -23,7 +24,7 @@ exports.register = async (req, res) => {
             return ApiResponse.send(false, "Ingrese un formato de correo válido, por favor.", null, res, 400);
         }
 
-        const personaExistente = await Persona.findOne({ where: { correo } });
+        const personaExistente = await personaRepository.getByNombre(correo);
 
         if (personaExistente) {
             return ApiResponse.send(false, "El correo ingresado ya está registrado, ingrese uno nuevo, por favor.", null, res, 400);
@@ -67,35 +68,28 @@ exports.login = async (req, res) => {
             return ApiResponse.send(false, "Correo y contraseña son obligatorios.", null, res, 400);
         }
 
-        const persona = await Persona.findOne({
-            where: { correo },
-            include: [{ model: Usuario, as: "usuario" }]
-        });
+        const usuario = await usuarioRepository.getByCorreo(correo);
 
-        if (!persona || !persona.usuario) {
+        if (!usuario) {
             return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
         }
 
-        const passwordMatch = await bcrypt.compare(contrasena, persona.usuario.contrasena);
+        const passwordMatch = await bcrypt.compare(contrasena, usuario.contrasena);
         if (!passwordMatch) {
             return ApiResponse.send(false, "Credenciales incorrectas.", null, res, 400);
         }
 
+        const persona = await personaRepository.getById(usuario.id_persona);
         if (!persona.verificado) {
             return ApiResponse.send(false, "Debes verificar tu correo antes de iniciar sesión.", null, res, 401);
         }
 
-        const accessToken = jwt.sign({ id: persona.usuario.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        const refreshToken = jwt.sign({ id: persona.usuario.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+        const accessToken = jwt.sign({ id: usuario.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const refreshToken = jwt.sign({ id: usuario.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
-        await RefreshToken.create({ usuarioId: persona.usuario.id, token: refreshToken });
+        await refreshTokenRepository.create(usuario.id, refreshToken);
 
-        // Eliminamos datos sensibles sin alterar el objeto principal
-        if (persona.usuario) {
-            persona.usuario.contrasena = undefined; // o null
-        }
-        persona.codigo_verificacion = undefined;
-        persona.codigo_expiracion = undefined;
+        usuario.contrasena = undefined;
 
         return ApiResponse.send(true, "Inicio de sesión exitoso.", { accessToken, refreshToken, persona }, res);
 
@@ -109,26 +103,7 @@ exports.deleteUsuarioCompleto = async (req, res) => {
     const idUsuario = req.user.id;
 
     try {
-        await sequelize.transaction(async (t) => {
-            const usuario = await Usuario.findByPk(idUsuario, { transaction: t });
-
-            if (!usuario) {
-                return ApiResponse.send(false, "Usuario no encontrado", null, res, 404);
-            }
-
-            const personaId = usuario.id_persona;
-
-            await usuario.destroy({ transaction: t });
-
-            const otrosUsuarios = await Usuario.findAll({
-                where: { id_persona: personaId },
-                transaction: t
-            });
-
-            if (otrosUsuarios.length === 0) {
-                await Persona.destroy({ where: { id: personaId }, transaction: t });
-            }
-        });
+        await usuarioRepository.deleteUsuario(idUsuario);
 
         return ApiResponse.send(true, "Usuario y persona eliminados correctamente.", null, res);
     } catch (error) {
@@ -154,7 +129,7 @@ exports.actualizarContrasena = async (req, res) => {
             return ApiResponse.send(false, "La nueva contraseña no es segura. Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.", null, res, 400);
         }
 
-        const usuario = await Usuario.findByPk(idUsuario);
+        const usuario = await usuarioRepository.getById(idUsuario);
         if (!usuario) {
             return ApiResponse.send(false, 'Usuario no encontrado.', null, res, 404);
         }
@@ -165,8 +140,7 @@ exports.actualizarContrasena = async (req, res) => {
         }
 
         const hashedNewPassword = await bcrypt.hash(nuevaContrasena, 10);
-        usuario.contrasena = hashedNewPassword;
-        await usuario.save();
+        await usuarioRepository.updatePasswordByPersonaId(idUsuario, hashedNewPassword);
 
         return ApiResponse.send(true, 'Contraseña actualizada correctamente.', null, res);
 
@@ -209,12 +183,12 @@ exports.verificarCodigo = async (req, res) => {
             return ApiResponse.send(false, "El código ha expirado, intente generando uno nuevo.", null, res, 400);
         }
 
-        const personaExistente = await Persona.findOne({ where: { correo } });
+        const personaExistente = await personaRepository.getByNombre(correo);
         if (personaExistente) {
             return ApiResponse.send(false, "El usuario ya fue registrado previamente.", null, res, 400);
         }
 
-        const persona = await Persona.create({
+        const persona = await personaRepository.create({
             nombre, apellido, correo, tipo, telefono,
             verificado: true,
             codigo_verificacion: null,
@@ -222,7 +196,7 @@ exports.verificarCodigo = async (req, res) => {
             fecha_nacimiento, genero, discapacidad
         });
 
-        await Usuario.create({
+        await usuarioRepository.create({
             id_persona: persona.id,
             contrasena: hashedPassword,
             fecha_nacimiento,
@@ -246,22 +220,21 @@ exports.perfil = async (req, res) => {
             return ApiResponse.send(false, "No autorizado. Token inválido.", null, res, 401);
         }
 
-        const usuario = await Usuario.findOne({
-            where: { id: req.user.id },
-            include: { model: Persona, as: "persona" }
-        });
+        const usuario = await usuarioRepository.getById(req.user.id);
 
         if (!usuario) {
             return ApiResponse.send(false, "Usuario no encontrado.", null, res, 404);
         }
 
+        const persona = await personaRepository.getById(usuario.id_persona);
+
         const data = {
             id: usuario.id,
-            nombre: usuario.persona.nombre,
-            apellido: usuario.persona.apellido,
-            correo: usuario.persona.correo,
-            tipo: usuario.persona.tipo,
-            telefono: usuario.persona.telefono,
+            nombre: persona.nombre,
+            apellido: persona.apellido,
+            correo: persona.correo,
+            tipo: persona.tipo,
+            telefono: persona.telefono,
             fecha_nacimiento: usuario.fecha_nacimiento,
             genero: usuario.genero,
             discapacidad: usuario.discapacidad
@@ -280,7 +253,7 @@ exports.refreshToken = async (req, res) => {
         const { token } = req.body;
         if (!token) return ApiResponse.send(false, "Refresh Token es requerido.", null, res, 400);
 
-        const storedToken = await RefreshToken.findOne({ where: { token } });
+        const storedToken = await refreshTokenRepository.findByToken(token); // Corrected method name
         if (!storedToken) return ApiResponse.send(false, "Refresh Token inválido.", null, res, 403);
 
         jwt.verify(token, process.env.JWT_REFRESH_SECRET, async (err, decoded) => {
@@ -304,7 +277,7 @@ exports.recuperarContrasena = async (req, res) => {
         if (!correo)
             return ApiResponse.send(false, "El correo es obligatorio para recuperar tu contraseña", null, res, 400);
 
-        const persona = await Persona.findOne({ where: { correo } });
+        const persona = await personaRepository.getByNombre(correo);
         if (!persona)
             return ApiResponse.send(false, "El correo no está registrado en el sistema", null, res, 404);
 
@@ -329,7 +302,7 @@ exports.logout = async (req, res) => {
         const { token } = req.body;
         if (!token) return ApiResponse.send(false, "Refresh Token es requerido.", null, res, 400);
 
-        await RefreshToken.destroy({ where: { token } });
+        await refreshTokenRepository.delete(token);
 
         return ApiResponse.send(true, "Sesión cerrada correctamente.", null, res);
     } catch (error) {
