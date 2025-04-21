@@ -1,4 +1,4 @@
-const { Persona, Usuario, sequelize } = require("../models/index");
+const { Persona, Usuario, sequelize } = require("../models");
 
 class PersonaRepository {
     async getAll() {
@@ -19,20 +19,17 @@ class PersonaRepository {
         return await persona.update(data);
     }
 
-    async delete(id) {
-        const transaction = await sequelize.transaction();
+    async deletePersona(id, transaction) {
         try {
-            // Elimina los registros relacionados en Usuarios
             await Usuario.destroy({ where: { id_persona: id }, transaction });
-
-            // Elimina el registro en Personas
             await Persona.destroy({ where: { id }, transaction });
-
-            await transaction.commit();
         } catch (error) {
-            await transaction.rollback();
             throw error;
         }
+    }
+
+    async getByNombre(correo) {
+        return await Persona.findOne({ where: { correo } });
     }
 }
 

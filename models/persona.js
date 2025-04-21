@@ -29,6 +29,18 @@ module.exports = (sequelize, DataTypes) => {
       },
       URL_imagen: {
         type: DataTypes.TEXT
+      },
+      verificado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
+      codigo_verificacion: {
+        type: DataTypes.STRING(10),
+        allowNull: true
+      },
+      codigo_expiracion: {
+        type: DataTypes.DATE,
+        allowNull: true
       }
     },
     {
@@ -40,13 +52,13 @@ module.exports = (sequelize, DataTypes) => {
   Persona.associate = (models) => {
     Persona.hasOne(models.Usuario, {
       foreignKey: "id_persona",
-      as: "usuario", // Alias para acceder como persona.usuario
+      as: "usuario",
       onDelete: "CASCADE"
     });
 
     Persona.hasOne(models.Psicologo, {
       foreignKey: "id_persona",
-      as: "psicologo", // Alias para acceder como persona.psicologo
+      as: "psicologo",
       onDelete: "CASCADE"
     });
   };

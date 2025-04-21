@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
   ActividadUsuario.associate = (models) => {
     ActividadUsuario.belongsTo(models.Usuario, { foreignKey: "id_usuario", onDelete: "CASCADE" });
-    ActividadUsuario.belongsTo(models.Actividad, { foreignKey: "id_actividad", onDelete: "CASCADE" });
+    ActividadUsuario.belongsTo(models.Actividad, { foreignKey: "id_actividad", onDelete: "CASCADE", as: "actividad" });
     ActividadUsuario.hasMany(models.RespuestaUsuarioActividad, { foreignKey: "id_actividad_usuario", onDelete: "CASCADE" });
   };
 

@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Actividad.associate = (models) => {
-    Actividad.belongsTo(models.TipoActividad, { foreignKey: "id_tipo_actividades", onDelete: "CASCADE" });
-    Actividad.hasMany(models.DescripcionActividad, { foreignKey: "id_actividad" });
+    Actividad.belongsTo(models.TipoActividad, { foreignKey: "id_tipo_actividades", onDelete: "CASCADE", as: "tipo_actividad" });
+    Actividad.hasMany(models.DescripcionActividad, { foreignKey: "id_actividad", as: "descripciones" });
     Actividad.hasMany(models.ActividadUsuario, { foreignKey: "id_actividad" });
   };
 

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   TipoActividad.associate = (models) => {
-    TipoActividad.hasMany(models.Actividad, { foreignKey: "id_tipo_actividades", onDelete: "CASCADE" });
+    TipoActividad.hasMany(models.Actividad, { foreignKey: "id_tipo_actividades", onDelete: "CASCADE", as: "actividades" });
   };
 
   return TipoActividad;
