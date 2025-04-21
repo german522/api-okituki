@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Psicologo.associate = (models) => {
-    Psicologo.belongsTo(models.Persona, { foreignKey: "id_persona", onDelete: "CASCADE" });
+    Psicologo.belongsTo(models.Persona, {
+      foreignKey: "id_persona",
+      as: "persona",
+      onDelete: "CASCADE"
+    });
   };
 
   return Psicologo;
