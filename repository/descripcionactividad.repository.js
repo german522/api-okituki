@@ -2,6 +2,12 @@ const { DescripcionActividad } = require("../models");
 const actividadRepository = require("./actividad.repository");
 
 class DescripcionActividadRepository {
+
+    async getAll() {
+        const descripciones = await DescripcionActividad.findAll();
+        return descripciones;
+    }
+
     async getById(id) {
         const descripcion = await DescripcionActividad.findByPk(id);
         if (!descripcion) return null;
