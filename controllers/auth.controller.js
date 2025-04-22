@@ -140,7 +140,7 @@ exports.actualizarContrasena = async (req, res) => {
         }
 
         const hashedNewPassword = await bcrypt.hash(nuevaContrasena, 10);
-        await usuarioRepository.updatePasswordByPersonaId(idUsuario, hashedNewPassword);
+        await usuarioRepository.update(idUsuario, { contrasena: hashedNewPassword });
 
         return ApiResponse.send(true, 'Contraseña actualizada correctamente.', null, res);
 
