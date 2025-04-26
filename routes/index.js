@@ -17,6 +17,7 @@ const actividadUsuarioRoutes = require("./actividadusuario.routes");
 const respuestasUsuarioActividadesRoutes = require("./respuestasusuarioactividades.routes");
 const authRoutes = require("./auth.routes");
 const perfilRoutes = require("./perfil.routes");
+const historialRoutes = require("./historial.routes");
 
 // Usar las rutas
 router.use("/personas", personaRoutes);
@@ -34,5 +35,5 @@ router.use("/actividadesusuario", actividadUsuarioRoutes);
 router.use("/respuestasusuarioactividades", respuestasUsuarioActividadesRoutes);
 router.use("/auth", authRoutes);
 router.use("/perfil", perfilRoutes);
-
+router.use("/historial", historialRoutes);
 module.exports = router;
