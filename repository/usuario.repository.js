@@ -1,4 +1,4 @@
-const { Usuario, Persona, sequelize } = require("../models");
+const { Usuario, Persona, ActividadUsuario, Resultado, RespuestaUsuarioActividad, sequelize } = require("../models");
 const personaRepository = require('./persona.repository');
 
 
@@ -39,11 +39,34 @@ class UsuarioRepository {
                 await transaction.rollback();
                 return null;
             }
-            const idPersona = usuario.id_persona;
+
+            // Eliminar los resultados asociados al usuario
+            await Resultado.destroy({
+                where: { id_usuario: id },
+                transaction
+            });
+
+            // Eliminar las actividades del usuario
+            const actividadesUsuario = await ActividadUsuario.findAll({
+                where: { id_usuario: id },
+                transaction
+            });
+
+            for (const actividad of actividadesUsuario) {
+                await RespuestaUsuarioActividad.destroy({
+                    where: { id_actividad_usuario: actividad.id },
+                    transaction
+                });
+            }
+
+            await ActividadUsuario.destroy({
+                where: { id_usuario: id },
+                transaction
+            });
 
             await usuario.destroy({ transaction });
 
-
+            const idPersona = usuario.id_persona;
             await personaRepository.deletePersona(idPersona, transaction);
 
             await transaction.commit();
@@ -53,6 +76,7 @@ class UsuarioRepository {
             throw error;
         }
     }
+
 
     async updatePasswordByPersonaId(id_persona, hashedPassword) {
         const usuario = await Usuario.findOne({ where: { id_persona } });

@@ -14,7 +14,8 @@ module.exports = {
         allowNull: false,
         references: {
           model: "Usuarios",
-          key: "id"
+          key: "id",
+          onDelete: "CASCADE"
         },
       },
       id_test: {
