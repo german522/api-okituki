@@ -105,10 +105,10 @@ exports.deleteUsuarioCompleto = async (req, res) => {
     try {
         await usuarioRepository.deleteUsuario(idUsuario);
 
-        return ApiResponse.send(true, "Usuario y persona eliminados correctamente.", null, res);
+        return ApiResponse.send(true, "¡Lamentamos que te vayas, pero recuerda que OkiTuki siempre estará aquí para ayudarte cuando lo necesites! ¡Hasta la próxima, que todo marche oki!", null, res);
     } catch (error) {
-        console.error("❌ Error al eliminar usuario y persona:", error);
-        return ApiResponse.send(false, "Error al eliminar usuario y persona.", null, res, 500);
+        console.error("❌ Error al eliminar cuenta, inténtelo de nuevo", error);
+        return ApiResponse.send(false, "Error interno al eliminar cuenta", null, res, 500);
     }
 };
 

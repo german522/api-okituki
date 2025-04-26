@@ -14,7 +14,8 @@ module.exports = {
         allowNull: false,
         references: {
           model: "Actividades_Usuario",
-          key: "id"
+          key: "id",
+          onDelete: "CASCADE"
         },
       },
       respuesta_texto: {
