@@ -19,6 +19,7 @@ const authRoutes = require("./auth.routes");
 const perfilRoutes = require("./perfil.routes");
 const historialRoutes = require("./historial.routes");
 
+
 // Usar las rutas
 router.use("/personas", personaRoutes);
 router.use("/usuarios", usuarioRoutes);

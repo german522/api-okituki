@@ -1,4 +1,5 @@
 const { Resultado } = require("../models");
+const { Op } = require("sequelize");
 
 class ResultadoRepository {
     async getAll() {
@@ -51,6 +52,23 @@ class ResultadoRepository {
         } catch (error) {
             console.error(`❌ Error en delete (ID: ${id}):`, error);
             throw new Error("Error al eliminar el resultado.");
+        }
+    }
+
+    async getGraficaByUsuario(id_usuario, fechaInicio, fechaFin) {
+        try {
+            const where = { id_usuario };
+
+            if (fechaInicio && fechaFin) {
+                where.fecha_realizacion = {
+                    [Op.between]: [new Date(fechaInicio), new Date(fechaFin)]
+                };
+            }
+
+            return await Resultado.findAll({ where });
+        } catch (error) {
+            console.error("❌ Error en getGraficaByUsuario:", error);
+            throw new Error("Error al obtener los resultados para la gráfica.");
         }
     }
 }
