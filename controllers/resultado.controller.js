@@ -95,3 +95,24 @@ exports.delete = async (req, res) => {
     }
 };
 
+exports.getGraficaByUsuario = async (req, res) => {
+    try {
+        const id_usuario = req.user.id;
+        const { fechaInicio, fechaFin } = req.query;
+
+        if (!fechaInicio || !fechaFin) {
+            return ApiResponse.send(false, "Debes proporcionar una fecha de inicio y una fecha de fin.", null, res, 400);
+        }
+
+        const resultados = await resultadoRepository.getGraficaByUsuario(id_usuario, fechaInicio, fechaFin);
+
+        if (!resultados || resultados.length === 0) {
+            return ApiResponse.send(false, "No se encontraron resultados en el rango de fechas.", null, res, 404);
+        }
+
+        return ApiResponse.send(true, "Resultados obtenidos para gráfica.", resultados, res);
+    } catch (error) {
+        console.error("❌ Error en GET /resultados/grafica:", error);
+        return ApiResponse.send(false, "Error interno al obtener los datos de la gráfica.", null, res, 500);
+    }
+};
