@@ -116,3 +116,20 @@ exports.getGraficaByUsuario = async (req, res) => {
         return ApiResponse.send(false, "Error interno al obtener los datos de la gráfica.", null, res, 500);
     }
 };
+
+exports.getUltimoResultado = async (req, res) => {
+    try {
+        const id_usuario = req.user.id;
+
+        const resultado = await resultadoRepository.getUltimoResultadoPorUsuario(id_usuario);
+
+        if (!resultado) {
+            return ApiResponse.send(false, "No se encontró ningún resultado reciente para este usuario.", null, res, 404);
+        }
+
+        return ApiResponse.send(true, "Último resultado obtenido con éxito.", resultado, res);
+    } catch (error) {
+        console.error("❌ Error en GET /resultados/ultimo:", error);
+        return ApiResponse.send(false, "Error interno al obtener el último resultado.", null, res, 500);
+    }
+};

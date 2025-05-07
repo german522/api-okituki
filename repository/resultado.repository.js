@@ -71,6 +71,18 @@ class ResultadoRepository {
             throw new Error("Error al obtener los resultados para la gráfica.");
         }
     }
+
+    async getUltimoResultadoPorUsuario(id_usuario) {
+        try {
+            return await Resultado.findOne({
+                where: { id_usuario },
+                order: [["fecha_realizacion", "DESC"]]
+            });
+        } catch (error) {
+            console.error("❌ Error en getUltimoResultadoPorUsuario:", error);
+            throw new Error("Error al obtener el último resultado del usuario.");
+        }
+    }
 }
 
 module.exports = new ResultadoRepository();
