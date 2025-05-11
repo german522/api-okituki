@@ -235,6 +235,7 @@ exports.perfil = async (req, res) => {
             correo: persona.correo,
             tipo: persona.tipo,
             telefono: persona.telefono,
+            imagen: persona.URL_imagen,
             fecha_nacimiento: usuario.fecha_nacimiento,
             genero: usuario.genero,
             discapacidad: usuario.discapacidad
