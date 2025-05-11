@@ -97,3 +97,24 @@ exports.delete = async (req, res) => {
     return ApiResponse.send(false, "Error al eliminar persona.", null, res, 500);
   }
 };
+
+exports.subirImagen = async (req, res) => {
+  try {
+    const file = req.file;
+    const usuarioId = req.user.id;
+
+    if (!file) {
+      return res.status(400).json({ mensaje: 'No se ha proporcionado una imagen.' });
+    }
+
+    const resultado = await personaRepository.subirImagenDesdeUsuario(usuarioId, file.path);
+
+    res.status(200).json({
+      mensaje: 'Imagen subida correctamente.',
+      url: resultado.url,
+    });
+  } catch (error) {
+    console.error('Error al subir imagen:', error);
+    res.status(500).json({ mensaje: 'Error del servidor.' });
+  }
+};
