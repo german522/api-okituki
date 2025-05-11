@@ -1,4 +1,5 @@
 const { Persona, Usuario, sequelize } = require("../models");
+const { cloudinary } = require('../config/cloudinary');
 
 class PersonaRepository {
     async getAll() {
@@ -30,6 +31,28 @@ class PersonaRepository {
 
     async getByNombre(correo) {
         return await Persona.findOne({ where: { correo } });
+    }
+
+    async subirImagenDesdeUsuario(id_usuario, imagenPath) {
+        try {
+            const usuario = await Usuario.findByPk(id_usuario);
+            if (!usuario) {
+                throw new Error('Usuario no encontrado');
+            }
+
+            const persona = await Persona.findByPk(usuario.id_persona);
+            if (!persona) {
+                throw new Error('Persona no encontrada');
+            }
+
+            const resultado = await cloudinary.uploader.upload(imagenPath);
+
+            await persona.update({ URL_imagen: resultado.secure_url });
+            return { url: resultado.secure_url };
+        } catch (error) {
+            console.error("Error al subir la imagen desde usuario:", error);
+            throw error;
+        }
     }
 }
 
