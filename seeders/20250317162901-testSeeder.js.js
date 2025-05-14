@@ -6,7 +6,7 @@ module.exports = {
     return queryInterface.bulkInsert("Tests", [
       {
         id: 1,
-        nombre: "Test inicial para la identificación del estrés.",
+        nombre: "Escala de estrés percibido.",
         descripcion: "El siguiente test nos ayudará a conocer tu estrés inicial, evaluaremos tu estrés según el último mes y basándonos en el formulario de escala de estrés percibido podremos obtener resultados claros y precisos y conocer si es que te encuentras en un estrés bajo, medio o alto."
       },
       {
