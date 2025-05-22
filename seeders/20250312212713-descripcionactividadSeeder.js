@@ -79,63 +79,63 @@ module.exports = {
         id_actividad: 3, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "El ejercicio se lleva a cabo en la postura de yoga simhasana, bien sea sentado o de rodillas.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 3.1.png"
       },
       {
         id: 12,
         id_actividad: 3, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "La idea es abrir la boca lo más grande que se pueda y sacar la lengua mientras se inhala por la nariz; y exhalar con fuerza a la vez que se emite un fuerte rugido, como el de un león.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 3.2.png"
       },
       {
         id: 13,
         id_actividad: 3, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Después de esto, se debe respirar con normalidad, hasta que se reinicie el ejercicio nuevamente. Se pueden realizar al menos siete repeticiones",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 3.3.png"
       },
       {
         id: 14,
         id_actividad: 4, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Ponerse en una posición cómoda, como sentarse en el suelo con las piernas cruzadas.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 4.1.png"
       },
       {
         id: 15,
         id_actividad: 4, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Inhalar y exhalar por la nariz, relajando la cara y la mandíbula.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 4.2.png"
       },
       {
         id: 16,
         id_actividad: 4, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Colocar los dedos índices sobre el cartílago de las orejas, bloqueando cualquier ruido o sonido.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 4.3.png"
       },
       {
         id: 17,
         id_actividad: 4, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Respirar profundamente por la nariz y exhalar por la nariz, emitiendo un zumbido o zumbido al exhalar. (Mantener los oídos tapados).",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 4.4.png"
       },
       {
         id: 18,
         id_actividad: 4, // Asegúrate de que exista este tipo de actividad
         numero_paso: 5,
         instruccion: "Continuar este proceso durante al menos 6 ciclos de respiración.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 4.5.png"
       },
       {
         id: 19,
         id_actividad: 5, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Inhalar por la nariz mientras se cuenta hasta cuatro.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion 5.1.png"
       },
       {
         id: 20,
@@ -485,70 +485,70 @@ module.exports = {
         id_actividad: 16, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Cinco cosas que puedas VER. Busca cinco objetos que puedas ver y describe mentalmente, uno por uno, sus características visuales: el color, el espacio que ocupa, los detalles, etc.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 1.1.png"
       },
       {
         id: 70,
         id_actividad: 16, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Cuatro cosas que puedas OÍR. Ahora tendrás que centrar tu atención en las características sonoras de cuatro objetos o situaciones: el ruido de los coches, el tono de voz de las personas que hablan a tu alrededor, el sonido constante del agua al caer, etc.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 1.2.png"
       },
       {
         id: 71,
         id_actividad: 16, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Tres cosas que puedas SENTIR. Deberás buscar tres objetos que puedas tocar o sentir y dirigir tu atención hacia la sensación que te trasmiten: el tacto frío de la mesa bajo tu mano, la dureza de la silla sobre la que estás sentado, la presión del calcetín y del zapato en tu pie, etc.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 1.3.png"
       },
       {
         id: 72,
         id_actividad: 16, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Dos cosas que puedas OLER. Centra tu atención en el sentido del olfato, buscando dos olores que puedas percibir: el perfume dulce de la persona que tienes a tu lado, el olor característico del café, el olor suave a vainilla de una vela, etc. Describe y da nombre a esos olores.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 1.4.png"
       },
       {
         id: 73,
         id_actividad: 16, // Asegúrate de que exista este tipo de actividad
         numero_paso: 5,
         instruccion: "Una cosa que puedas SABOREAR. Esta puede ser la más difícil, pero deberás dirigir tu atención hacia algo que puedas saborear: puedes focalizarte en el sabor de tu propia saliva o tomar un caramelo y definir cómo es su sabor.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 1.5.png"
       },
       {
         id: 74,
         id_actividad: 17, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Busca cinco objetos con texturas diferentes a tu alrededor.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 2.1.png"
       },
       {
         id: 75,
         id_actividad: 17, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Toca cada objeto y concéntrate en su textura.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 2.2.png"
       },
       {
         id: 76,
         id_actividad: 17, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Describa cómo se siente, ¿es suave o áspero?, es liso o rugoso?, ¿es frío o cálido?",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 2.3.png"
       },
       {
         id: 77,
         id_actividad: 17, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Intenta encontrar texturas más complejas o combinaciones de texturas en un solo objeto.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 2.4.png"
       },
       {
         id: 78,
         id_actividad: 18, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Mire a su alrededor y señale 5 cosas que sean azules.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 3.1.png"
       },
       {
         id: 79,
@@ -590,7 +590,7 @@ module.exports = {
         id_actividad: 19, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Quítate los zapatos y busca una superficie con tierra, como pasto, arena o piedras.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 4.1.png"
       },
       {
         id: 85,
@@ -618,7 +618,7 @@ module.exports = {
         id_actividad: 20, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Encuentra un lugar tranquilo y elige un sonido a tu alrededor (puede ser el viento, el canto de un pájaro, el murmullo de la gente o cualquier otro sonido ambiental).",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Concentracion 5.1.png"
       },
       {
         id: 89,
