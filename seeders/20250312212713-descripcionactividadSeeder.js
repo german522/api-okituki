@@ -9,70 +9,70 @@ module.exports = {
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Siéntese o acuéstese en una posición cómoda.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion1.1.png"
       },
       {
         id: 2,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion1.2.png"
       },
       {
         id: 3,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Respire hondo por la nariz y deje que el abdomen le empuje la mano. El pecho no debería moverse.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion1.3.png"
       },
       {
         id: 4,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Exhale a través de los labios fruncidos como si estuviese silbando. Sienta cómo se hunde la mano sobre su abdomen y utilícela para expulsar todo el aire hacia afuera.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion1.4.png"
       },
       {
         id: 5,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 5,
         instruccion: "Realice este ejercicio de respiración entre 3 y 10 veces. Tómese su tiempo con cada respiración.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion1.5.png"
       },
       {
         id: 6,
         id_actividad: 2, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Para comenzar, coloque una mano sobre el abdomen y la otra sobre el pecho, al igual que en el ejercicio de respiración abdominal.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion2.1.png"
       },
       {
         id: 7,
         id_actividad: 2, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Respire profunda y lentamente desde el abdomen y cuente en silencio hasta 4 a medida que inhala.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion2.2.png"
       },
       {
         id: 8,
         id_actividad: 2, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Contenga la respiración y cuente en silencio del 1 al 7.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion2.3.png"
       },
       {
         id: 9,
         id_actividad: 2, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Exhale por completo a medida que cuenta en silencio del 1 al 8. Intente sacar todo el aire de los pulmones para cuando llegue a 8.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion2.4.png"
       },
       {
         id: 10,
         id_actividad: 2, // Asegúrate de que exista este tipo de actividad
         numero_paso: 5,
         instruccion: "Repítalo entre 3 y 7 veces o hasta que se sienta tranquilo.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Respiracion2.5.png"
       },
       {
         id: 11,
@@ -212,147 +212,147 @@ module.exports = {
         id_actividad: 7, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Comience apoyando las manos y las rodillas en una colchoneta o en una alfombra. Alinee su cuerpo, de manera que los hombros estén directamente sobre las muñecas y las caderas sigan la línea de las rodillas. Inhale.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 2.1.png"
       },
       {
         id: 31,
         id_actividad: 7, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Exhale y, luego, mueva las manos algunas pulgadas hacia el frente y baje las nalgas hacia los talones, solo hasta la mitad. Los brazos deben presionar hacia adelante, y solo las manos deben tocar el piso.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 2.2.png"
       },
       {
         id: 32,
         id_actividad: 7, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Después, baje la frente hasta la colchoneta o la alfombra y relaje el cuello. Presione las manos hacia abajo y hacia adelante sobre el piso, y sienta cómo se estiran los brazos. Al mismo tiempo, mueva las caderas hacia atrás en dirección a los talones. Al mover los brazos y las caderas en direcciones opuestas, puede estirar bien la columna vertebral. En esta posición, respire normalmente y sienta cómo se estira la columna vertebral. Mantenga esta postura entre 30 segundos y 1 minuto.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 2.3.png"
       },
       {
         id: 33,
         id_actividad: 7, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Apoye las nalgas sobre los talones. Relájese.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 2.4.png"
       },
       {
         id: 34,
         id_actividad: 8, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Comience apoyando las manos y las rodillas en una colchoneta o en una alfombra, con el cuerpo alineado, de manera que los hombros estén directamente sobre las muñecas y las caderas sigan la línea de las rodillas. La espalda debe estar derecha, y el cuello debe extenderse en forma recta desde la columna vertebral. Debe mirar hacia el piso.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 3.1.png"
       },
       {
         id: 35,
         id_actividad: 8, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "La próxima vez que exhale, encorve la columna vertebral hacia arriba, como un gato. Sin mover las rodillas y los hombros, arquee la cabeza hacia el piso. Intente no tocar el pecho con la barbilla.",
-        URL_imagen: ""
+        URL_imagen: "/uploadas/yoga 3.2.png"
       },
       {
         id: 36,
         id_actividad: 8, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Mientras inhala, arquee la espalda y levante el pecho y los isquiones (los huesos de las nalgas que puede sentir cuando se sienta en una silla dura) hacia arriba. Al hacer esto, el abdomen se moverá naturalmente hacia el piso. Se levanta la cabeza, manteniendo la vista recta hacia el frente (no mirando hacia arriba).",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 3.3.png"
       },
       {
         id: 37,
         id_actividad: 8, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Repita la secuencia entre 10 y 20 veces. Asegúrese de hacer los movimientos a medida que inhala y exhala.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 3.4.png"
       },
       {
         id: 38,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Es recomendable usar uno o más de los siguientes accesorios: Una o más mantas rígidas y dobladas, para apoyar la espalda. Una manta enrollada, almohadas rígidas o bloques para yoga, para apoyar las rodillas. Un cojín, para apoyar el cuello.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.1.png"
       },
       {
         id: 39,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Siéntese en el piso presionando las plantas de los pies juntas. Las rodillas deben estar flexionadas, y los pies deben estar lo más cerca posible del cuerpo sin esforzarse, de manera que se sienta cómodo.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.2.png"
       },
       {
         id: 40,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Si piensa usar accesorios, coloque los bloques de yoga debajo de las rodillas o use una manta (vea el paso 4 para obtener instrucciones sobre cómo posicionar la manta). Debe brindar apoyo a las rodillas al nivel que le resulte cómodo cuando se recline. Use más de una almohada si es necesario. No debe esforzarse por tener las rodillas lo más cerca posible del piso.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.3.png"
       },
       {
         id: 41,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Si usa una manta para sostener las rodillas, envuélvala a su alrededor por debajo de las rodillas.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.4.png"
       },
       {
         id: 42,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 5,
         instruccion: "Para sostener la espalda, tome una o más mantas firmes y colóquelas extendiéndolas a lo largo de toda la espalda, para que el torso y la cabeza se apoyen cuando se recueste. Asegúrese de que las mantas sean lo suficientemente anchas para que también puedan sostener los hombros. Es recomendable que coloque las mantas de manera que se adapten a la curvatura de la columna vertebral cuando se recueste, como se muestra en la imagen. También puede usar una manta como almohada para sostener la cabeza.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.5.png"
       },
       {
         id: 43,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 6,
         instruccion: "Debería sentarse justo delante de las mantas; de esta manera, cuando se recueste, el torso y la cabeza podrán apoyarse. Es posible que tenga que probar para ver cuántas mantas debe usar.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.6.png"
       },
       {
         id: 44,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 7,
         instruccion: "Recuéstese suavemente sobre el piso.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.7.png"
       },
       {
         id: 45,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 8,
         instruccion: "Coloque los brazos a los costados en un ángulo de 45 grados, aproximadamente, con las palmas hacia arriba. Cierre los ojos y respire normalmente. Relájese.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.8.png"
       },
       {
         id: 46,
         id_actividad: 9, // Asegúrate de que exista este tipo de actividad
         numero_paso: 9,
         instruccion: "Al principio, mantenga esta postura durante un 1 minuto, como máximo. Después, puede mantener la postura durante períodos más largos de hasta 10 minutos.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 4.9.png"
       },
       {
         id: 47,
         id_actividad: 10, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Colócate en una posición vertical, es decir, de pie. Colócate sobre tus dos pies juntos, recta como un palo, pero sin forzar la curvatura natural de la espalda baja.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 5.1.png"
       },
       {
         id: 48,
         id_actividad: 10, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "En esta posición erguida, eleva uno de tus pies y déjalo descansar sobre tu pantorrilla o gemelo (no rodilla), donde más cómodo te sea.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 5.2.png"
       },
       {
         id: 49,
         id_actividad: 10, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Ahora, manteniendo el equilibrio, sube tus brazos y junta las palmas de tus manos sobre tu cabeza o delante de tu pecho. ",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 5.3.png"
       },
       {
         id: 50,
         id_actividad: 10, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Inténtalo las veces que quieras hasta que te sientas a gusto con ella, en ambos lados del cuerpo por varios segundos.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/yoga 5.4.png"
       },
       {
         id: 51,
@@ -380,105 +380,105 @@ module.exports = {
         id_actividad: 12, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Simplemente coloca las palmas de las manos en la zona lumbar de la espalda e inclínate suavemente hacia atrás mirando hacia arriba.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 2.1.png"
       },
       {
         id: 55,
         id_actividad: 12, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Mantente en esa posición durante 10 segundos.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 2.2.png"
       },
       {
         id: 56,
         id_actividad: 12, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Inhala y exhala lentamente, estirándote cada vez más mientras exhalas. Solo asegúrate de no estirarte tanto que sientas dolor",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 2.3.png"
       },
       {
         id: 57,
         id_actividad: 13, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Mientras estés sentado, cruza los brazos sobre el pecho y coloca las manos en los hombros opuestos.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 3.1.png"
       },
       {
         id: 58,
         id_actividad: 13, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Ahora mantén las caderas mirando hacia adelante y rota la parte superior del cuerpo, girando los hombros hacia un lado.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 3.2.png"
       },
       {
         id: 59,
         id_actividad: 13, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Mantente en esta posición durante cinco segundos y respira profundamente.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 3.3.png"
       },
       {
         id: 60,
         id_actividad: 13, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "En la próxima inhalación, regresa al centro y luego cambia de lado.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 3.4.png"
       },
       {
         id: 61,
         id_actividad: 14, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Colócate de pie y entrelaza las manos detrás de la espalda.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 4.1.png"
       },
       {
         id: 62,
         id_actividad: 14, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Después, levanta suavemente los brazos alejándolos del cuerpo hasta que sientas que se estiran los hombros.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 4.2.png"
       },
       {
         id: 63,
         id_actividad: 14, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "No te preocupes si no se tocan las manos. Simplemente trata de llegar lo más lejos posible que puedas hacia atrás y levanta los brazos lentamente.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 4.3.png"
       },
       {
         id: 64,
         id_actividad: 15, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Mientras estás sentado, estira la pierna derecha hacia adelante y coloca la planta del pie izquierdo en la parte interna del muslo derecho.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 5.1.png"
       },
       {
         id: 65,
         id_actividad: 15, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Asegúrate de que las caderas estén mirando hacia adelante.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 5.2.png"
       },
       {
         id: 66,
         id_actividad: 15, // Asegúrate de que exista este tipo de actividad
         numero_paso: 3,
         instruccion: "Ahora inclina la parte superior del cuerpo tan lejos como puedas sobre la pierna derecha de manera que sientas un estiramiento en la parte trasera de la pierna.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 5.3.png"
       },
       {
         id: 67,
         id_actividad: 15, // Asegúrate de que exista este tipo de actividad
         numero_paso: 4,
         instruccion: "Mantente en esta posición durante 10 segundos y respira profundamente.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 5.4.png"
       },
       {
         id: 68,
         id_actividad: 15, // Asegúrate de que exista este tipo de actividad
         numero_paso: 5,
         instruccion: "Con cada exhalación deja que la parte superior del cuerpo caiga un poquito más con el estiramiento. Luego, cambia de pierna.",
-        URL_imagen: ""
+        URL_imagen: "/uploads/Estiramiento 5.5.png"
       },
       {
         id: 69,
