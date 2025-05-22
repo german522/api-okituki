@@ -35,17 +35,22 @@ exports.getById = async (req, res) => {
             return ApiResponse.send(false, "ID de descripción de actividad no válido. Debe ser un número entero positivo.", null, res, 400);
         }
 
-        const descripcion = await descripcionActividadRepository.getById(id);
+        const descripcionRaw = await descripcionActividadRepository.getById(id);
 
-        if (!descripcion) {
+        if (!descripcionRaw) {
             return ApiResponse.send(false, `No se encontró una descripción de actividad con el ID ${id}.`, null, res, 404);
         }
 
-        if (!descripcion.URL_imagen || descripcion.URL_imagen.trim() === "") {
-            delete descripcion.URL_imagen;
+        const descripcion = descripcionRaw.get ? descripcionRaw.get({ plain: true }) : descripcionRaw;
+
+        if (descripcion.url_imagen) {
+            descripcion.url_imagen = `${req.protocol}://${req.get("host")}${descripcion.url_imagen}`;
         } else {
-            descripcion.URL_imagen = `${req.protocol}://${req.get("host")}${descripcion.URL_imagen}`;
+            descripcion.url_imagen = null;
         }
+
+        // Eliminar URL_imagen mayúscula si existe para no duplicar
+        if (descripcion.URL_imagen) delete descripcion.URL_imagen;
 
         return ApiResponse.send(true, "Descripción de actividad obtenida con éxito.", descripcion, res);
     } catch (error) {
@@ -53,3 +58,4 @@ exports.getById = async (req, res) => {
         return ApiResponse.send(false, "Error interno al obtener la descripción de actividad.", null, res, 500);
     }
 };
+
