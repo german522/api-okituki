@@ -9,14 +9,14 @@ module.exports = {
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Siéntese o acuéstese en una posición cómoda.",
-        URL_imagen: "/uploads/1.jpg"
+        URL_imagen: "https://res.cloudinary.com/dzxi5k6ez/image/upload/v1756060317/1_sd7qjx.jpg"
       },
       {
         id: 2,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.",
-        URL_imagen: "/uploads/2.jpg"
+        URL_imagen: "https://res.cloudinary.com/dzxi5k6ez/image/upload/v1756060317/1_sd7qjx.jpg"
       },
       {
         id: 3,
@@ -488,159 +488,159 @@ module.exports = {
         URL_imagen: "/uploads/69.jpg"
       },
       {
-    id: 70,
-    id_actividad: 16,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 2,
-    instruccion: "Cuatro cosas que puedas OÍR...",
-    URL_imagen: "/uploads/70.jpg"
-  },
-  {
-    id: 71,
-    id_actividad: 16,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 3,
-    instruccion: "Tres cosas que puedas SENTIR...",
-    URL_imagen: "/uploads/71.jpg"
-  },
-  {
-    id: 72,
-    id_actividad: 16,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 4,
-    instruccion: "Dos cosas que puedas OLER...",
-    URL_imagen: "/uploads/72.jpg"
-  },
-  {
-    id: 73,
-    id_actividad: 16,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 5,
-    instruccion: "Una cosa que puedas SABOREAR...",
-    URL_imagen: "/uploads/73.jpg"
-  },
-  {
-    id: 74,
-    id_actividad: 17,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 1,
-    instruccion: "Busca cinco objetos con texturas diferentes...",
-    URL_imagen: "/uploads/74.jpg"
-  },
-  {
-    id: 75,
-    id_actividad: 17,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 2,
-    instruccion: "Toca cada objeto y concéntrate...",
-    URL_imagen: "/uploads/75.jpg"
-  },
-  {
-    id: 76,
-    id_actividad: 17,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 3,
-    instruccion: "Describa cómo se siente...",
-    URL_imagen: "/uploads/76.jpg"
-  },
-  {
-    id: 77,
-    id_actividad: 17,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 4,
-    instruccion: "Intenta encontrar texturas más complejas...",
-    URL_imagen: "/uploads/77.jpg"
-  },
-  {
-    id: 78,
-    id_actividad: 18,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 1,
-    instruccion: "Mire a su alrededor y señale 5 cosas que sean azules.",
-    URL_imagen: "/uploads/78.jpg"
-  },
-  {
-    id: 79,
-    id_actividad: 18,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 2,
-    instruccion: "Ahora cinco cosas que sean círculos.",
-    URL_imagen: "/uploads/79.jpg"
-  },
-  {
-    id: 80,
-    id_actividad: 18,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 3,
-    instruccion: "Ahora cinco cosas que sean suaves.",
-    URL_imagen: "/uploads/80.jpg"
-  },
-  {
-    id: 81,
-    id_actividad: 18,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 4,
-    instruccion: "Ahora cinco cosas que quepan en su mano.",
-    URL_imagen: "/uploads/81.jpg"
-  },
-  {
-    id: 82,
-    id_actividad: 18,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 5,
-    instruccion: "Por último cinco cosas que lo hagan sentir seguro.",
-    URL_imagen: "/uploads/82.jpg"
-  },
-  {
-    id: 83,
-    id_actividad: 18,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 6,
-    instruccion: "Recuerda que puedes repetir las veces que sean necesarias...",
-    URL_imagen: "/uploads/83.jpg"
-  },
-  {
-    id: 84,
-    id_actividad: 19,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 1,
-    instruccion: "Quítate los zapatos y busca una superficie con tierra...",
-    URL_imagen: "/uploads/84.jpg"
-  },
-  {
-    id: 85,
-    id_actividad: 19,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 2,
-    instruccion: "Camina sin detenerte durante diez minutos...",
-    URL_imagen: "/uploads/85.jpg"
-  },
-  {
-    id: 86,
-    id_actividad: 19,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 3,
-    instruccion: "Concéntrate en lo que tus pies están sintiendo...",
-    URL_imagen: "/uploads/86.jpg"
-  },
-  {
-    id: 87,
-    id_actividad: 19,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 4,
-    instruccion: "Respira pausadamente hasta que se vuelva natural.",
-    URL_imagen: "/uploads/87.jpg"
-  },
-  {
-    id: 88,
-    id_actividad: 20,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 1,
-    instruccion: "Encuentra un lugar tranquilo y elige un sonido...",
-    URL_imagen: "/uploads/88.jpg"
-  },
-  {
-    id: 89,
-    id_actividad: 20,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 2,
-    instruccion: "Concéntrate únicamente en ese sonido.",
-    URL_imagen: "/uploads/89.jpg"
-  },
-  {
-    id: 90,
-    id_actividad: 20,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 3,
-    instruccion: "Describe sus características...",
-    URL_imagen: "/uploads/90.jpg"
-  },
-  {
-    id: 91,
-    id_actividad: 20,// Asegúrate de que exista este tipo de actividad
-    numero_paso: 4,
-    instruccion: "Intenta percibir variaciones en el sonido...",
-    URL_imagen: "/uploads/91.jpg"
-  }
+        id: 70,
+        id_actividad: 16,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 2,
+        instruccion: "Cuatro cosas que puedas OÍR...",
+        URL_imagen: "/uploads/70.jpg"
+      },
+      {
+        id: 71,
+        id_actividad: 16,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 3,
+        instruccion: "Tres cosas que puedas SENTIR...",
+        URL_imagen: "/uploads/71.jpg"
+      },
+      {
+        id: 72,
+        id_actividad: 16,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 4,
+        instruccion: "Dos cosas que puedas OLER...",
+        URL_imagen: "/uploads/72.jpg"
+      },
+      {
+        id: 73,
+        id_actividad: 16,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 5,
+        instruccion: "Una cosa que puedas SABOREAR...",
+        URL_imagen: "/uploads/73.jpg"
+      },
+      {
+        id: 74,
+        id_actividad: 17,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 1,
+        instruccion: "Busca cinco objetos con texturas diferentes...",
+        URL_imagen: "/uploads/74.jpg"
+      },
+      {
+        id: 75,
+        id_actividad: 17,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 2,
+        instruccion: "Toca cada objeto y concéntrate...",
+        URL_imagen: "/uploads/75.jpg"
+      },
+      {
+        id: 76,
+        id_actividad: 17,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 3,
+        instruccion: "Describa cómo se siente...",
+        URL_imagen: "/uploads/76.jpg"
+      },
+      {
+        id: 77,
+        id_actividad: 17,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 4,
+        instruccion: "Intenta encontrar texturas más complejas...",
+        URL_imagen: "/uploads/77.jpg"
+      },
+      {
+        id: 78,
+        id_actividad: 18,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 1,
+        instruccion: "Mire a su alrededor y señale 5 cosas que sean azules.",
+        URL_imagen: "/uploads/78.jpg"
+      },
+      {
+        id: 79,
+        id_actividad: 18,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 2,
+        instruccion: "Ahora cinco cosas que sean círculos.",
+        URL_imagen: "/uploads/79.jpg"
+      },
+      {
+        id: 80,
+        id_actividad: 18,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 3,
+        instruccion: "Ahora cinco cosas que sean suaves.",
+        URL_imagen: "/uploads/80.jpg"
+      },
+      {
+        id: 81,
+        id_actividad: 18,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 4,
+        instruccion: "Ahora cinco cosas que quepan en su mano.",
+        URL_imagen: "/uploads/81.jpg"
+      },
+      {
+        id: 82,
+        id_actividad: 18,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 5,
+        instruccion: "Por último cinco cosas que lo hagan sentir seguro.",
+        URL_imagen: "/uploads/82.jpg"
+      },
+      {
+        id: 83,
+        id_actividad: 18,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 6,
+        instruccion: "Recuerda que puedes repetir las veces que sean necesarias...",
+        URL_imagen: "/uploads/83.jpg"
+      },
+      {
+        id: 84,
+        id_actividad: 19,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 1,
+        instruccion: "Quítate los zapatos y busca una superficie con tierra...",
+        URL_imagen: "/uploads/84.jpg"
+      },
+      {
+        id: 85,
+        id_actividad: 19,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 2,
+        instruccion: "Camina sin detenerte durante diez minutos...",
+        URL_imagen: "/uploads/85.jpg"
+      },
+      {
+        id: 86,
+        id_actividad: 19,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 3,
+        instruccion: "Concéntrate en lo que tus pies están sintiendo...",
+        URL_imagen: "/uploads/86.jpg"
+      },
+      {
+        id: 87,
+        id_actividad: 19,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 4,
+        instruccion: "Respira pausadamente hasta que se vuelva natural.",
+        URL_imagen: "/uploads/87.jpg"
+      },
+      {
+        id: 88,
+        id_actividad: 20,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 1,
+        instruccion: "Encuentra un lugar tranquilo y elige un sonido...",
+        URL_imagen: "/uploads/88.jpg"
+      },
+      {
+        id: 89,
+        id_actividad: 20,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 2,
+        instruccion: "Concéntrate únicamente en ese sonido.",
+        URL_imagen: "/uploads/89.jpg"
+      },
+      {
+        id: 90,
+        id_actividad: 20,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 3,
+        instruccion: "Describe sus características...",
+        URL_imagen: "/uploads/90.jpg"
+      },
+      {
+        id: 91,
+        id_actividad: 20,// Asegúrate de que exista este tipo de actividad
+        numero_paso: 4,
+        instruccion: "Intenta percibir variaciones en el sonido...",
+        URL_imagen: "/uploads/91.jpg"
+      }
     ]);
   },
 
