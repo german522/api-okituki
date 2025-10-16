@@ -9,14 +9,14 @@ module.exports = {
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 1,
         instruccion: "Siéntese o acuéstese en una posición cómoda.",
-        URL_imagen: "https://res.cloudinary.com/dzxi5k6ez/image/upload/v1756060317/1_sd7qjx.jpg"
+        URL_imagen: "https://api-okituki.onrender.com/uploads/24.jpg"
       },
       {
         id: 2,
         id_actividad: 1, // Asegúrate de que exista este tipo de actividad
         numero_paso: 2,
         instruccion: "Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.",
-        URL_imagen: "https://res.cloudinary.com/dzxi5k6ez/image/upload/v1756060317/1_sd7qjx.jpg"
+        URL_imagen: "https://api-okituki.onrender.com/uploads/24.jpg"
       },
       {
         id: 3,
